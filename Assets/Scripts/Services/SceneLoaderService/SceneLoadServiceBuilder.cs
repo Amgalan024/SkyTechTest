@@ -7,7 +7,7 @@ namespace Utils.SceneLoader
     {
         public override void Build(IContainerBuilder builder)
         {
-            builder.Register<SceneLoadService>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<SceneLoadService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         }
     }
 }

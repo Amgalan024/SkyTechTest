@@ -1,7 +1,6 @@
 ﻿using Core;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Utils.LoadingScreen;
 using Utils.LoadingScreen.SetupData;
 using Utils.SceneLoader;
@@ -12,7 +11,7 @@ namespace SceneSwitchLogic.Switchers
     {
         public string Key { get; }
 
-        private readonly Scene _scene;
+        private readonly string _scene;
 
         private readonly LoadingScreenService _loadingScreenService;
         private readonly SceneLoadService _sceneLoadService;
@@ -21,7 +20,7 @@ namespace SceneSwitchLogic.Switchers
         private float _progress;
         private float _stepProgress;
 
-        public BaseSceneSwitcher(string key, Scene scene, LoadingScreenService loadingScreenService,
+        public BaseSceneSwitcher(string key, string scene, LoadingScreenService loadingScreenService,
             SceneLoadService sceneLoadService, DefaultLoadingScreenSetupData loadingScreenSetupData)
         {
             Key = key;
@@ -35,7 +34,7 @@ namespace SceneSwitchLogic.Switchers
         {
             _loadingScreenService.Show<DefaultLoadingScreen>(_loadingScreenSetupData);
             _loadingScreenService.SetStatus("Scene Loading", _progress);
-            await _sceneLoadService.LoadSceneAsync(_scene);
+            await _sceneLoadService.SwitchSceneAsync(_scene);
             _progress += 0.5f;
             var entryPointHolder = Object.FindObjectOfType<EntryPointHolder>();
             var entryPoint = entryPointHolder.GetEntryPoint();

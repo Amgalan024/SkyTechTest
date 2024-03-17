@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Core.MainMenu.Config;
+using Core.MainMenu.LoadingSteps;
 using Core.MainMenu.Views;
 using SceneSwitchLogic.Switchers;
 using UnityEngine;
@@ -16,7 +17,12 @@ namespace Core.MainMenu.EntryPoint
         [SerializeField] private MainMenuView _mainMenuView;
         [SerializeField] private MainMenuConfig _mainMenuConfig;
 
-        private List<ILoadingStep> _loadingSteps;
+        private List<ILoadingStep> _loadingSteps = new()
+        {
+            new DelayLoadingStep("Step 1", 0.5f),
+            new DelayLoadingStep("Step 2", 1f),
+            new DelayLoadingStep("Step 3", 1f),
+        };
 
         public bool LoadCompleted { get; private set; }
         public int LoadStepsCount => _loadingSteps.Count;

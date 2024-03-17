@@ -9,6 +9,8 @@ public class ServicesEntryPoint : LifetimeScope
 
     protected override void Awake()
     {
+        base.Awake();
+
         DontDestroyOnLoad(this);
     }
 

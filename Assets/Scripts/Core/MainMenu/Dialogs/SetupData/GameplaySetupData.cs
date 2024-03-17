@@ -1,5 +1,8 @@
-﻿namespace Core.MainMenu.Models
+﻿using System;
+
+namespace Core.MainMenu.Models
 {
+    [Serializable]
     public class GameplaySetupData
     {
         public int MinRounds;

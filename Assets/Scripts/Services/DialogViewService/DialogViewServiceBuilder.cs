@@ -13,7 +13,7 @@ namespace Utils.DialogView
         {
             builder.RegisterInstance(_dialogViewPrefabs);
             builder.Register<DialogViewProvider>(Lifetime.Singleton).AsSelf();
-            builder.Register<DialogViewService>(Lifetime.Singleton).AsSelf();
+            builder.Register<DialogViewService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         }
     }
 }

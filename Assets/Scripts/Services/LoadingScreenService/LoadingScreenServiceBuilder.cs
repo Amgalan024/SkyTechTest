@@ -12,7 +12,7 @@ namespace Utils.LoadingScreen
         {
             builder.RegisterInstance(_loadingScreenViews);
             builder.Register<LoadingScreenProvider>(Lifetime.Singleton).AsSelf();
-            builder.Register<LoadingScreenService>(Lifetime.Singleton).AsSelf();
+            builder.Register<LoadingScreenService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         }
     }
 }

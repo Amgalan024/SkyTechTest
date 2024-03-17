@@ -8,7 +8,7 @@ namespace SceneSwitchLogic.EntryPoint
     {
         public override void Build(IContainerBuilder builder)
         {
-            builder.Register<SceneSwitchService>(Lifetime.Singleton);
+            builder.Register<SceneSwitchService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         }
     }
 }
