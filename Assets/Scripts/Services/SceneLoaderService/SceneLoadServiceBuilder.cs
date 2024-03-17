@@ -1,13 +1,20 @@
-﻿using Utils;
-using VContainer;
+﻿using VContainer;
 
 namespace Utils.SceneLoader
 {
     public class SceneLoadServiceBuilder : BaseServiceBuilder
     {
-        public override void Build(IContainerBuilder builder)
+        private SceneLoadService _sceneLoadService;
+
+        public override IService Build()
         {
-            builder.Register<SceneLoadService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            _sceneLoadService = new SceneLoadService();
+            return _sceneLoadService;
+        }
+
+        public override void Configure(IContainerBuilder builder)
+        {
+            builder.RegisterInstance(_sceneLoadService);
         }
     }
 }

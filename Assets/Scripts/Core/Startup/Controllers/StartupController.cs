@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Core.Startup.Config;
+﻿using Core.Startup.Config;
 using SceneSwitchLogic.Switchers;
 using Utils.LoadingScreen;
 using Utils.SceneLoader;
@@ -7,7 +6,7 @@ using VContainer.Unity;
 
 namespace Core.Startup
 {
-    public class StartupController : IInitializable, IStartable
+    public class StartupController : IInitializable
     {
         private readonly StartupConfig _config;
         private readonly SceneSwitchService _sceneSwitchService;
@@ -15,8 +14,7 @@ namespace Core.Startup
         private readonly SceneLoadService _sceneLoadService;
 
         public StartupController(StartupConfig config, SceneSwitchService sceneSwitchService,
-            LoadingScreenService loadingScreenService,
-            SceneLoadService sceneLoadService)
+            LoadingScreenService loadingScreenService, SceneLoadService sceneLoadService)
         {
             _config = config;
             _sceneSwitchService = sceneSwitchService;
@@ -26,23 +24,23 @@ namespace Core.Startup
 
         public void Initialize()
         {
-            
-        }
-
-        public void Start()
-        {
             var mainMenuSwitchConfig = _config.MainMenuSwitchConfig;
+            var gameplaySwitchConfig = _config.GameplaySwitchConfig;
+
+            var startupSwitcher = new StartupSwitcher(mainMenuSwitchConfig.MainMenuScene, _loadingScreenService,
+                _sceneLoadService);
+
             var mainMenuSwitcher = new BaseSceneSwitcher("MainMenu", mainMenuSwitchConfig.MainMenuScene,
                 _loadingScreenService, _sceneLoadService, mainMenuSwitchConfig.LoadingScreenSetupData);
 
-            var gameplaySwitchConfig = _config.GameplaySwitchConfig;
             var gameplaySwitcher = new BaseSceneSwitcher("Gameplay", gameplaySwitchConfig.GameplayScene,
                 _loadingScreenService, _sceneLoadService, gameplaySwitchConfig.LoadingScreenSetupData);
 
+            _sceneSwitchService.AddSwitcher(startupSwitcher);
             _sceneSwitchService.AddSwitcher(mainMenuSwitcher);
             _sceneSwitchService.AddSwitcher(gameplaySwitcher);
 
-            _sceneSwitchService.Switch("MainMenu");
+            _sceneSwitchService.Switch(startupSwitcher.Key);
         }
     }
 }

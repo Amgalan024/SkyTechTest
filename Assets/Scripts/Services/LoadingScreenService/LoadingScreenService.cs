@@ -2,8 +2,10 @@
 
 namespace Utils.LoadingScreen
 {
-    public class LoadingScreenService
+    public class LoadingScreenService : IService
     {
+        public bool Ready { get; }
+        
         private readonly LoadingScreenProvider _loadingScreenProvider;
         private BaseLoadingScreenView _activeLoadingScreenView;
 
@@ -16,10 +18,14 @@ namespace Utils.LoadingScreen
         {
             var loadingScreen = _loadingScreenProvider.GetLoadingScreen<TLoadingScreenView>();
             Assert.IsNotNull(loadingScreen);
-            
+
             _activeLoadingScreenView = loadingScreen;
 
-            loadingScreen.Setup(setupData);
+            if (setupData != null)
+            {
+                loadingScreen.Setup(setupData);
+            }
+
             loadingScreen.Show();
         }
 
@@ -38,5 +44,6 @@ namespace Utils.LoadingScreen
             _activeLoadingScreenView.SetLoadingText(loadingText);
             _activeLoadingScreenView.SetLoadingProgress(loadingProgress);
         }
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Core.Gameplay.Config;
 using SceneSwitchLogic.Switchers;
 using UnityEngine;
+using Utils.LoadingScreen.SetupData;
 
 namespace Core.Startup.Config
 {
@@ -9,5 +10,6 @@ namespace Core.Startup.Config
     {
         [field: SerializeField] public MainMenuSwitchConfig MainMenuSwitchConfig { get; private set; }
         [field: SerializeField] public GameplaySwitchConfig GameplaySwitchConfig { get; private set; }
+        [field: SerializeField] public DefaultLoadingScreenSetupData StartLoadingScreenSetupData { get; private set; }
     }
 }

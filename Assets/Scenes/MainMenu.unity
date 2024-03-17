@@ -275,7 +275,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentReference:
-    TypeName: ServicesEntryPoint
+    TypeName: StartupEntryPoint
   autoRun: 0
   autoInjectGameObjects: []
   _mainMenuView: {fileID: 706427996}

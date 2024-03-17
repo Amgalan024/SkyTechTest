@@ -7,12 +7,18 @@ namespace Utils.LoadingScreen
     public class LoadingScreenServiceBuilder : BaseServiceBuilder
     {
         [SerializeField] private List<BaseLoadingScreenView> _loadingScreenViews;
+        private LoadingScreenService _loadingScreenService;
 
-        public override void Build(IContainerBuilder builder)
+        public override IService Build()
         {
-            builder.RegisterInstance(_loadingScreenViews);
-            builder.Register<LoadingScreenProvider>(Lifetime.Singleton).AsSelf();
-            builder.Register<LoadingScreenService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            var loadingScreenProvider = new LoadingScreenProvider(_loadingScreenViews);
+            _loadingScreenService = new LoadingScreenService(loadingScreenProvider);
+            return _loadingScreenService;
+        }
+
+        public override void Configure(IContainerBuilder builder)
+        {
+            builder.RegisterInstance(_loadingScreenService);
         }
     }
 }

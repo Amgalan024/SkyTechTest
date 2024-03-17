@@ -8,12 +8,18 @@ namespace Utils.DialogView
     public class DialogViewServiceBuilder : BaseServiceBuilder
     {
         [SerializeField] private List<BaseDialogView> _dialogViewPrefabs;
+        private DialogViewService _dialogViewService;
 
-        public override void Build(IContainerBuilder builder)
+        public override IService Build()
         {
-            builder.RegisterInstance(_dialogViewPrefabs);
-            builder.Register<DialogViewProvider>(Lifetime.Singleton).AsSelf();
-            builder.Register<DialogViewService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            var dialogViewProvider = new DialogViewProvider(_dialogViewPrefabs);
+            _dialogViewService = new DialogViewService(dialogViewProvider);
+            return _dialogViewService;
+        }
+
+        public override void Configure(IContainerBuilder builder)
+        {
+            builder.RegisterInstance(_dialogViewService);
         }
     }
 }

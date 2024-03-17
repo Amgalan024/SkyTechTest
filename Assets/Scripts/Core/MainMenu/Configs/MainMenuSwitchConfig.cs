@@ -8,5 +8,6 @@ namespace SceneSwitchLogic.Switchers
     {
         [field: SerializeField] public string MainMenuScene { get; private set; }
         [field: SerializeField] public DefaultLoadingScreenSetupData LoadingScreenSetupData { get; private set; }
+        [field: SerializeField] public DefaultLoadingScreenSetupData StartLoadingScreenSetupData { get; private set; }
     }
 }

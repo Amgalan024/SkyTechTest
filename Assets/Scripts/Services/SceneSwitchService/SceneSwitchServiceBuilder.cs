@@ -6,9 +6,17 @@ namespace SceneSwitchLogic.EntryPoint
 {
     public class SceneSwitchServiceBuilder : BaseServiceBuilder
     {
-        public override void Build(IContainerBuilder builder)
+        private SceneSwitchService _sceneSwitchService;
+
+        public override IService Build()
         {
-            builder.Register<SceneSwitchService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            _sceneSwitchService = new SceneSwitchService();
+            return _sceneSwitchService;
+        }
+
+        public override void Configure(IContainerBuilder builder)
+        {
+            builder.RegisterInstance(_sceneSwitchService);
         }
     }
 }

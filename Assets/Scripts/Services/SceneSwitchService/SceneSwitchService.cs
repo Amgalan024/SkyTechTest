@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using UnityEngine.Assertions;
+using Utils;
 
 namespace SceneSwitchLogic.Switchers
 {
     //todo:Подобрать другое название вместо Scene, тут происходит "переключения логических частей игры" 
-    public class SceneSwitchService
+    public class SceneSwitchService : IService
     {
+        public bool Ready { get; }
+
         private readonly Dictionary<string, ISwitcher> _switchers = new();
 
         public void AddSwitcher(ISwitcher switcher)

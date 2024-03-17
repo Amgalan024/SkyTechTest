@@ -5,8 +5,9 @@ using Utils.DialogView.Views;
 
 namespace Utils.DialogView
 {
-    public class DialogViewService
+    public class DialogViewService : IService
     {
+        public bool Ready { get; }
         private DialogViewProvider _dialogViewProvider;
 
         public DialogViewService(DialogViewProvider dialogViewProvider)
