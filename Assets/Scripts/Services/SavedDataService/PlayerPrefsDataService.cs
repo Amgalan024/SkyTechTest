@@ -2,6 +2,7 @@
 
 namespace Utils.SavedDataProvider
 {
+    //todo: сделать билдер который будет регать этот сервис как интерфейс, может быть другой билдер который зарегает серверный дата сервис
     public class PlayerPrefsDataService : ISaveDataService
     {
         public T GetData<T>(string key)

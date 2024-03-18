@@ -2,7 +2,6 @@
 using SceneSwitchLogic.Switchers;
 using UnityEngine;
 using Utils.LoadingScreen;
-using Utils.LoadingScreen.SetupData;
 using Utils.SceneLoader;
 
 namespace Core.Startup
@@ -40,8 +39,8 @@ namespace Core.Startup
             _stepProgress = (1f - _progress) / (entryPoint.LoadStepsCount + 1);
             entryPoint.OnLoadStepStarted += HandleLoadStepStarted;
 
+            await entryPoint.PreloadEntryPoint();
             entryPoint.BuildEntryPoint();
-            await UniTask.WaitUntil(() => entryPoint.LoadCompleted);
 
             _progress += _stepProgress;
             _loadingScreenService.SetStatus("Completed", _progress);

@@ -1,7 +1,6 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
 using SceneSwitchLogic.Switchers;
-using VContainer;
 
 namespace Core.MainMenu.LoadingSteps
 {
@@ -17,7 +16,7 @@ namespace Core.MainMenu.LoadingSteps
             _delay = delay;
         }
 
-        public async UniTask Load(IContainerBuilder builder)
+        public async UniTask Load()
         {
             await UniTask.Delay(TimeSpan.FromSeconds(_delay));
         }

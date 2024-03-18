@@ -15,4 +15,4 @@ MonoBehaviour:
   <GameplayScene>k__BackingField: Gameplay
   <LoadingScreenSetupData>k__BackingField:
     HeaderText: To Gameplay
-    BackgroundColor: {r: 1, g: 0, b: 0, a: 1}
+    BackgroundColor: {r: 1, g: 0.504717, b: 0.504717, a: 1}

@@ -42,8 +42,8 @@ namespace SceneSwitchLogic.Switchers
             _stepProgress = (1f - _progress) / (entryPoint.LoadStepsCount + 1);
             entryPoint.OnLoadStepStarted += HandleLoadStepStarted;
 
+            await entryPoint.PreloadEntryPoint();
             entryPoint.BuildEntryPoint();
-            await UniTask.WaitUntil(() => entryPoint.LoadCompleted);
 
             _progress += _stepProgress;
             _loadingScreenService.SetStatus("Completed", _progress);

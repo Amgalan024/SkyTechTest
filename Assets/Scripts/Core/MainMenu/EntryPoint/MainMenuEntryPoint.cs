@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Core.MainMenu.Config;
 using Core.MainMenu.LoadingSteps;
 using Core.MainMenu.Views;
+using Cysharp.Threading.Tasks;
 using SceneSwitchLogic.Switchers;
 using UnityEngine;
 using VContainer;
-using VContainer.Unity;
 
 namespace Core.MainMenu.EntryPoint
 {
-    public class MainMenuEntryPoint : LifetimeScope, IEntryPoint
+    public class MainMenuEntryPoint : BaseEntryPoint
     {
-        public event Action<string> OnLoadStepStarted;
-
         [SerializeField] private MainMenuView _mainMenuView;
         [SerializeField] private MainMenuConfig _mainMenuConfig;
+        [SerializeField] private BaseEntryPoint[] _subEntryPoints;
+
+        public override int LoadStepsCount => 1;
 
         private List<ILoadingStep> _loadingSteps = new()
         {
@@ -24,26 +24,34 @@ namespace Core.MainMenu.EntryPoint
             new DelayLoadingStep("Step 3", 1f),
         };
 
-        public bool LoadCompleted { get; private set; }
-        public int LoadStepsCount => _loadingSteps.Count;
-
-        void IEntryPoint.BuildEntryPoint()
+        public override void BuildEntryPoint()
         {
             Build();
+
+            foreach (var entryPoint in _subEntryPoints)
+            {
+                entryPoint.BuildEntryPoint();
+            }
         }
 
-        protected override async void Configure(IContainerBuilder builder)
+        public override async UniTask PreloadEntryPoint()
         {
-            foreach (var loadingStep in _loadingSteps)
+            foreach (var entryPoint in _subEntryPoints)
             {
-                OnLoadStepStarted?.Invoke(loadingStep.Name);
-                await loadingStep.Load(builder);
+                await entryPoint.PreloadEntryPoint();
             }
 
+            foreach (var loadingStep in _loadingSteps)
+            {
+                InvokeLoadStepStart(loadingStep.Name);
+                await loadingStep.Load();
+            }
+        }
+
+        protected override void Configure(IContainerBuilder builder)
+        {
             builder.RegisterInstance(_mainMenuView);
             builder.RegisterInstance(_mainMenuConfig);
-
-            LoadCompleted = true;
         }
     }
 }

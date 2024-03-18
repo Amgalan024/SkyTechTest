@@ -12,7 +12,6 @@ public class StartupEntryPoint : LifetimeScope
     [SerializeField] private StartupConfig _config;
 
     [SerializeField] private ServicesEntryPoint _servicesEntryPoint;
-    [SerializeField] private DefaultLoadingScreenSetupData _loadingScreenSetupData;
 
     private async void Start()
     {
@@ -21,7 +20,7 @@ public class StartupEntryPoint : LifetimeScope
 
         var loadingScreenService = _servicesEntryPoint.GetService<LoadingScreenService>();
 
-        loadingScreenService.Show<DefaultLoadingScreen>(_loadingScreenSetupData);
+        loadingScreenService.Show<DefaultLoadingScreen>(_config.StartLoadingScreenSetupData);
         loadingScreenService.SetStatus("Services Loading", 0f);
 
         await UniTask.WaitUntil(() => _servicesEntryPoint.ServicesReady);

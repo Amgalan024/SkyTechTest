@@ -6,13 +6,13 @@ namespace Core
     {
         [SerializeField] private GameObject _entryPointHolder;
 
-        private IEntryPoint _entryPoint;
+        private BaseEntryPoint _entryPoint;
 
-        public IEntryPoint GetEntryPoint()
+        public BaseEntryPoint GetEntryPoint()
         {
             if (_entryPoint == null)
             {
-                _entryPoint = _entryPointHolder.GetComponent<IEntryPoint>();
+                _entryPoint = _entryPointHolder.GetComponent<BaseEntryPoint>();
             }
 
             return _entryPoint;

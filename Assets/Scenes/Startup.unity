@@ -309,10 +309,9 @@ MonoBehaviour:
   autoInjectGameObjects: []
   _config: {fileID: 11400000, guid: c82a22b303a30364f96ae888a2f5e71b, type: 2}
   _servicesEntryPoint: {fileID: 1382072238}
-  _defaultLoadingScreen: {fileID: 655711221}
-  _loadingScreenSetupData:
-    HeaderText: Start
-    BackgroundColor: {r: 0.7080812, g: 0.921321, b: 0.9811321, a: 1}
+  _startLoadingScreenSetupData:
+    HeaderText: Start Loading
+    BackgroundColor: {r: 0.5518868, g: 0.86035544, b: 1, a: 1}
 --- !u!1 &249294930
 GameObject:
   m_ObjectHideFlags: 0
@@ -1053,10 +1052,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc5977cb8a954d16a2474c52cdeed012, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parentReference:
-    TypeName: 
-  autoRun: 0
-  autoInjectGameObjects: []
   _baseServiceBuilders:
   - {fileID: 2008860961}
   - {fileID: 419313895}

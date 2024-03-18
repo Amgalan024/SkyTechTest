@@ -1,0 +1,34 @@
+{
+  "shopItems": [
+    {
+      "$type": "Core.Store.Models.GameCurrencyProduct, Core",
+      "key": "gold",
+      "amount": 100,
+      "price": 1.99,
+      "currency": "usd"
+    },
+    {
+      "$type": "Core.Store.Models.GameCurrencyProduct, Core",
+      "key": "silver",
+      "amount": 5000,
+      "price": 0.99,
+      "currency": "usd"
+    },
+    {
+      "$type": "Core.Store.Models.ItemsPackProduct, Core",
+      "key": "starterPack",
+      "items": [
+        {
+          "key": "sword",
+          "damage": 14
+        },
+        {
+          "key": "ressurect",
+          "amount": 3
+        }
+      ],
+      "price": 1.99,
+      "currency": "usd"
+    }
+  ]
+}
