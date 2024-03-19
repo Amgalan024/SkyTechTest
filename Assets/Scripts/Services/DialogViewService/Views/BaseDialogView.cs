@@ -8,6 +8,7 @@ namespace Utils.DialogView.Views
     public abstract class BaseDialogView : MonoBehaviour
     {
         public event Action OnCloseClicked;
+
         [SerializeField] private Button _closeButton;
 
         public abstract void Setup(object setupData);

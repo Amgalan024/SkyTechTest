@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core.Store.Configs;
+using Core.Store.Dialogs;
 using Core.Store.Models;
 using Core.Store.Providers;
 using Core.Store.View;
+using Cysharp.Threading.Tasks;
+using Utils.DialogView;
 using VContainer.Unity;
 using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
 namespace Core.Store.Controller
 {
@@ -15,6 +19,7 @@ namespace Core.Store.Controller
         private readonly IProductsProvider _productsProvider;
         private readonly StoreConfig _config;
         private readonly StoreView _storeView;
+        private readonly DialogViewService _dialogViewService;
 
         private readonly Dictionary<Type, Type> _productTypeToProductViewDict = new()
         {
@@ -24,11 +29,15 @@ namespace Core.Store.Controller
 
         private Products _products;
 
-        public StoreController(IProductsProvider productsProvider, StoreConfig config, StoreView storeView)
+        private readonly Dictionary<BaseProductView, BaseProduct> _productsByView = new();
+
+        public StoreController(IProductsProvider productsProvider, StoreConfig config, StoreView storeView,
+            DialogViewService dialogViewService)
         {
             _productsProvider = productsProvider;
             _config = config;
             _storeView = storeView;
+            _dialogViewService = dialogViewService;
         }
 
         public async void Initialize()
@@ -37,12 +46,31 @@ namespace Core.Store.Controller
 
             foreach (var shopItem in _products.shopItems)
             {
-                var itemViewType = _productTypeToProductViewDict[shopItem.GetType()];
+                var productViewType = _productTypeToProductViewDict[shopItem.GetType()];
 
-                var itemViewPrefab = _config.BaseItemViewPrefabs.FirstOrDefault(p => p.GetType() == itemViewType);
+                var productViewPrefab = _config.BaseItemViewPrefabs.FirstOrDefault(p => p.GetType() == productViewType);
 
-                var itemView = Object.Instantiate(itemViewPrefab, _storeView.ProductLayoutGroup.transform);
+                var productView = Object.Instantiate(productViewPrefab, _storeView.ProductLayoutGroup.transform);
+                productView.Setup(shopItem);
+                productView.OnPurchaseClicked += HandlePurchase;
+
+                _productsByView.Add(productView, shopItem);
             }
+        }
+
+        private async void HandlePurchase(BaseProductView productView)
+        {
+            var product = _productsByView[productView];
+
+            var purchaseDialog = await _dialogViewService.ShowAsync<PurchaseProcessDialog>(product);
+
+            var randomPurchaseDelay = Random.Range(1, 3);
+
+            await UniTask.Delay(TimeSpan.FromSeconds(randomPurchaseDelay));
+
+            var randomPurchaseStatus = Random.Range(0, 2) == 1;
+
+            purchaseDialog.SetPurchaseStatus(randomPurchaseStatus);
         }
     }
 }
