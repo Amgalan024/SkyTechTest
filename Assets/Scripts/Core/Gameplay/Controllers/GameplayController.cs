@@ -62,10 +62,11 @@ namespace Core.Gameplay.Controllers
             _fieldConstructor.CreateField(_gameplaySettings.FieldSize);
 
             //todo:сделать зависимость стратегий от настроек которые пришли с меню
-            var botStrategy = new BotInputStrategy(_fieldConstructor.FieldCellModels);
-            var playerStrategy = new PlayerInputStrategy(_fieldConstructor.FieldCellModelsByView);
+            var botStrategy = new BotInputStrategy("1", _fieldConstructor.FieldCellModels);
+            var playerStrategy = new PlayerInputStrategy("2", _fieldConstructor.FieldCellModelsByView);
             playerStrategy.Initialize();
 
+            _inputStrategies = new LinkedList<IInputStrategy>();
             _inputStrategies.AddFirst(botStrategy);
             _inputStrategies.AddFirst(playerStrategy);
 
@@ -77,14 +78,13 @@ namespace Core.Gameplay.Controllers
 
         private async void SetTextTurn(FieldCellModel fieldCellModel)
         {
-            ClaimFieldCell(fieldCellModel);
+            ClaimFieldCellView(fieldCellModel);
 
             _currentTurnInputStrategy.Value.OnInput -= SetTextTurn;
 
             if (CheckLineWinLenght(fieldCellModel))
             {
-                await UniTask.Delay(TimeSpan
-                    .FromSeconds(3)); //todo: добавить анимацию победы с показом очков и чет там еще по ТЗ
+                await UniTask.Delay(TimeSpan.FromSeconds(3)); //todo: добавить анимацию победы с показом очков и чет там еще по ТЗ
 
                 var gameResult = new GameplayResult(fieldCellModel.ClaimedById);
 
@@ -103,11 +103,11 @@ namespace Core.Gameplay.Controllers
             _currentTurnInputStrategy.Value.OnInput += SetTextTurn;
             _currentTurnInputStrategy.Value.HandleInput();
         }
-
-        private void ClaimFieldCell(FieldCellModel fieldCellModel)
+        
+        private void ClaimFieldCellView(FieldCellModel fieldCellModel)
         {
             var fieldCellView = _fieldConstructor.FieldCellViewsByModel[fieldCellModel];
-            fieldCellView.SetClaimed(fieldCellModel.ClaimedById);
+            fieldCellView.SetClaimed(fieldCellModel.ClaimedById);//todo:в будущем во вьюшку пойдет не id а какой нить спрайт доделать
         }
 
         private bool CheckLineWinLenght(FieldCellModel fieldCellModel)

@@ -13,18 +13,18 @@ namespace Core.MainMenu.Views.DialogView
 
         public int Value => (int) _valueSlider.value;
 
-        public void Setup(int minValue, int maxValue)
+        public void Setup(string valueName, int minValue, int maxValue)
         {
             _valueSlider.wholeNumbers = true;
             _valueSlider.minValue = minValue;
             _valueSlider.maxValue = maxValue;
-            _valueSlider.value = minValue;
 
             _minValueText.text = minValue.ToString();
             _maxValueText.text = maxValue.ToString();
             _selectedValueText.text = minValue.ToString();
 
-            _valueSlider.onValueChanged.AddListener(value => _selectedValueText.text = ((int) value).ToString());
+            _valueSlider.onValueChanged.AddListener(value => _selectedValueText.text = $"{valueName} : {((int) value)}");
+            _valueSlider.value = minValue;
         }
     }
 }

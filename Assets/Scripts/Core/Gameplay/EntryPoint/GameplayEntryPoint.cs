@@ -13,7 +13,8 @@ namespace Core.Gameplay.EntryPoint
     public class GameplayEntryPoint : BaseEntryPoint
     {
         [SerializeField] private GameplayView _gameplayView;
-
+        [SerializeField] private FieldView _fieldView;
+        [SerializeField] private FieldCellView _fieldCellPrefab;
         public override int LoadStepsCount { get; }
 
         private List<ISectionLoadingStep> _loadingSteps = new()
@@ -41,6 +42,10 @@ namespace Core.Gameplay.EntryPoint
         {
             builder.RegisterInstance(SectionSwitchParams);
             builder.RegisterInstance(_gameplayView);
+            builder.RegisterInstance(_fieldView);
+            builder.RegisterInstance(_fieldCellPrefab);
+
+            builder.Register<FieldConstructor>(Lifetime.Singleton);
 
             builder.RegisterEntryPoint<GameplayController>();
         }

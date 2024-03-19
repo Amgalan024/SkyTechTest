@@ -13,5 +13,10 @@ MonoBehaviour:
   m_Name: MainMenuConfig
   m_EditorClassIdentifier: 
   <GameplaySetupSettingsData>k__BackingField:
+    FieldSizeSetupName: Field Size
+    TotalRoundsSetupName: Total Rounds
+    LineWinLeghtSetupName: Line Win Lenght
+    MinFieldSize: 3
+    MaxFieldSize: 8
     MinRounds: 3
     MaxRounds: 5

@@ -56,7 +56,7 @@ namespace Core.Gameplay
                         _fieldView.CellsContainer);
 
                     fieldCellView.SetSize(cellSize);
-
+                    fieldCellView.SetClaimed(string.Empty);
                     var gridPosition = new Vector2(x, y);
                     var fieldCellModel = new FieldCellModel(gridPosition);
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -9,6 +10,7 @@ namespace Core.Gameplay.Views
         public event Action<FieldCellView> OnClicked;
 
         [SerializeField] private SpriteRenderer _spriteRenderer;
+        [SerializeField] private TextMeshPro _idText;
 
         /// <summary>
         /// В будущем скорее всего сюда будет передаваться спрайт фигуры для заполнения клетки,
@@ -17,8 +19,9 @@ namespace Core.Gameplay.Views
         /// <param name="id"></param>
         public void SetClaimed(string id)
         {
-            
+            _idText.text = id;
         }
+
         public void SetSize(int size)
         {
             _spriteRenderer.size = Vector2.one * size;

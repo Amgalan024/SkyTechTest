@@ -27,9 +27,12 @@ namespace Core.MainMenu.Views.DialogView
 
             Assert.IsNotNull(gameplaySetupData);
 
-            _roundsCountSlider.Setup(gameplaySetupData.MinRounds, gameplaySetupData.MaxRounds);
-            _fieldSizeSlider.Setup(gameplaySetupData.MinFieldSize, gameplaySetupData.MaxFieldSize);
-            _lineWinLenghtSlider.Setup(gameplaySetupData.MinFieldSize, gameplaySetupData.MaxFieldSize);
+            _roundsCountSlider.Setup(gameplaySetupData.TotalRoundsSetupName, gameplaySetupData.MinRounds,
+                gameplaySetupData.MaxRounds);
+            _fieldSizeSlider.Setup(gameplaySetupData.FieldSizeSetupName, gameplaySetupData.MinFieldSize,
+                gameplaySetupData.MaxFieldSize);
+            _lineWinLenghtSlider.Setup(gameplaySetupData.LineWinLeghtSetupName, gameplaySetupData.MinFieldSize,
+                gameplaySetupData.MaxFieldSize);
         }
 
         public override async UniTask ShowAsync()

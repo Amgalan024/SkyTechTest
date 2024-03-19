@@ -11,11 +11,13 @@ namespace Core.Gameplay.InputStrategies
 
         private readonly Dictionary<FieldCellView, FieldCellModel> _fieldCellModelsByView;
 
+        private readonly string _id;
         private bool _canInput;
 
-        public PlayerInputStrategy(Dictionary<FieldCellView, FieldCellModel> fieldCellModelsByView)
+        public PlayerInputStrategy(string id, Dictionary<FieldCellView, FieldCellModel> fieldCellModelsByView)
         {
             _fieldCellModelsByView = fieldCellModelsByView;
+            _id = id;
         }
 
         void IInputStrategy.HandleInput()
@@ -37,6 +39,7 @@ namespace Core.Gameplay.InputStrategies
 
             if (_canInput)
             {
+                fieldCellModel.ClaimCell(_id);
                 OnInput?.Invoke(fieldCellModel);
             }
 
