@@ -2,7 +2,7 @@
 
 namespace SceneSwitchLogic.Switchers
 {
-    public interface ISwitcher
+    public interface ISectionSwitcher
     {
         string Key { get; }
         UniTask Switch();

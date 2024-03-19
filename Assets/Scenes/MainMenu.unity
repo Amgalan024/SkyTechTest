@@ -455,7 +455,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e67bd26885a4c049fd7ffd9b6a640ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _entryPointHolder: {fileID: 231254709}
+  <EntryPoint>k__BackingField: {fileID: 231254710}
 --- !u!4 &353104160
 Transform:
   m_ObjectHideFlags: 0

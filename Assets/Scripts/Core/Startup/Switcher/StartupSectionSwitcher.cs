@@ -1,43 +1,40 @@
-﻿using Core;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
+using SceneSwitchLogic.Switchers;
 using UnityEngine;
 using Utils.LoadingScreen;
-using Utils.LoadingScreen.SetupData;
 using Utils.SceneLoader;
 
-namespace SceneSwitchLogic.Switchers
+namespace Core.Startup
 {
-    public class BaseSceneSwitcher : ISwitcher
+    public class StartupSectionSwitcher : ISectionSwitcher
     {
-        public string Key { get; }
+        public string Key => "Startup";
 
         private readonly string _scene;
-
         private readonly LoadingScreenService _loadingScreenService;
         private readonly SceneLoadService _sceneLoadService;
-        private readonly DefaultLoadingScreenSetupData _loadingScreenSetupData;
 
         private float _progress;
         private float _stepProgress;
 
-        public BaseSceneSwitcher(string key, string scene, LoadingScreenService loadingScreenService,
-            SceneLoadService sceneLoadService, DefaultLoadingScreenSetupData loadingScreenSetupData)
+        public StartupSectionSwitcher(string scene, LoadingScreenService loadingScreenService,
+            SceneLoadService sceneLoadService)
         {
-            Key = key;
             _scene = scene;
             _loadingScreenService = loadingScreenService;
             _sceneLoadService = sceneLoadService;
-            _loadingScreenSetupData = loadingScreenSetupData;
         }
 
         public async UniTask Switch()
         {
-            _loadingScreenService.Show<DefaultLoadingScreen>(_loadingScreenSetupData);
-            _loadingScreenService.SetStatus("Scene Loading", _progress);
+            //todo: добавить в сервис лоадинг скрина поле прогресс котоырй можно будет брать и от него отталкиваться при работа с одним экраном в разных частях прилы
+            _loadingScreenService.SetStatus("Loading Menu Scene", _progress);
+
             await _sceneLoadService.SwitchSceneAsync(_scene);
-            _progress += 0.5f;
+            _progress += 0.25f;
+
             var entryPointHolder = Object.FindObjectOfType<EntryPointHolder>();
-            var entryPoint = entryPointHolder.GetEntryPoint();
+            var entryPoint = entryPointHolder.EntryPoint;
 
             _stepProgress = (1f - _progress) / (entryPoint.LoadStepsCount + 1);
             entryPoint.OnLoadStepStarted += HandleLoadStepStarted;

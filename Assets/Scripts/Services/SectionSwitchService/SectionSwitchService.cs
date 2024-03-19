@@ -4,19 +4,18 @@ using Utils;
 
 namespace SceneSwitchLogic.Switchers
 {
-    //todo:Подобрать другое название вместо Scene, тут происходит "переключения логических частей игры" 
-    public class SceneSwitchService : IService
+    public class SectionSwitchService : IService
     {
         public bool Ready { get; }
 
-        private readonly Dictionary<string, ISwitcher> _switchers = new();
+        private readonly Dictionary<string, ISectionSwitcher> _switchers = new();
 
-        public void AddSwitcher(ISwitcher switcher)
+        public void AddSwitcher(ISectionSwitcher sectionSwitcher)
         {
-            _switchers.Add(switcher.Key, switcher);
+            _switchers.Add(sectionSwitcher.Key, sectionSwitcher);
         }
 
-        public void AddSwitchers(IEnumerable<ISwitcher> switchers)
+        public void AddSwitchers(IEnumerable<ISectionSwitcher> switchers)
         {
             foreach (var switcher in switchers)
             {

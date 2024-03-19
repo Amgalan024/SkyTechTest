@@ -22,17 +22,17 @@ namespace Core.MainMenu.Controller
 
         private readonly DialogViewService _dialogViewService;
         private readonly ISaveDataService _saveDataService;
-        private readonly SceneSwitchService _sceneSwitchService;
+        private readonly SectionSwitchService _sectionSwitchService;
 
         private readonly List<Action> _disposeActions = new();
 
-        public MainMenuController(MainMenuView view, MainMenuModel model, MainMenuConfig config, SceneSwitchService sceneSwitchService,
+        public MainMenuController(MainMenuView view, MainMenuModel model, MainMenuConfig config, SectionSwitchService sectionSwitchService,
             DialogViewService dialogViewService)
         {
             _view = view;
             _model = model;
             _config = config;
-            _sceneSwitchService = sceneSwitchService;
+            _sectionSwitchService = sectionSwitchService;
             _dialogViewService = dialogViewService;
         }
 
@@ -73,7 +73,7 @@ namespace Core.MainMenu.Controller
 
         private void StartGameplay()
         {
-            _sceneSwitchService.Switch("Gameplay");
+            _sectionSwitchService.Switch("Gameplay");
         }
 
         private void QuitApplication()
