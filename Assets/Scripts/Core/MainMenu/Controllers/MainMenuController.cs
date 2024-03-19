@@ -88,7 +88,8 @@ namespace Core.MainMenu.Controller
 
         private void StartGameplay()
         {
-            var gameSettings = new GameplaySettings("Game 1");
+            var gameSettings = new GameplaySettings("Player", "Bot", _gameplaySetupDialog.RoundsSliderValue,
+                _gameplaySetupDialog.FieldSizeSliderValue, _gameplaySetupDialog.LineWinLenghtSliderValue);
 
             _sectionSwitchService.Switch("Gameplay", gameSettings);
         }
