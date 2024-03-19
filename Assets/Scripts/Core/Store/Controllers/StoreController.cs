@@ -14,7 +14,7 @@ using Random = UnityEngine.Random;
 
 namespace Core.Store.Controller
 {
-    public class StoreController : IInitializable
+    public class StoreController : IInitializable, IDisposable
     {
         private readonly IProductsProvider _productsProvider;
         private readonly StoreConfig _config;
@@ -40,7 +40,7 @@ namespace Core.Store.Controller
             _dialogViewService = dialogViewService;
         }
 
-        public async void Initialize()
+        async void IInitializable.Initialize()
         {
             _products = await _productsProvider.GetProducts();
 
@@ -55,6 +55,14 @@ namespace Core.Store.Controller
                 productView.OnPurchaseClicked += HandlePurchase;
 
                 _productsByView.Add(productView, shopItem);
+            }
+        }
+
+        void IDisposable.Dispose()
+        {
+            foreach (var productView in _productsByView.Keys)
+            {
+                productView.OnPurchaseClicked -= HandlePurchase;
             }
         }
 

@@ -5,6 +5,6 @@ namespace SceneSwitchLogic.Switchers
     public interface ISectionSwitcher
     {
         string Key { get; }
-        UniTask Switch();
+        UniTask Switch(params object[] switchParams);
     }
 }

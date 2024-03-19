@@ -1,6 +1,7 @@
 ﻿using System;
 using Core.MainMenu.Models;
 using Cysharp.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
@@ -12,6 +13,9 @@ namespace Core.MainMenu.Views.DialogView
     {
         public event Action OnConfirmClicked;
 
+        [SerializeField] private TextMeshProUGUI _selectedRoundsCountText;
+        [SerializeField] private TextMeshProUGUI _minRoundsCountText;
+        [SerializeField] private TextMeshProUGUI _maxRoundsCountText;
         [SerializeField] private Slider _roundsCountSlider;
         [SerializeField] private Button _confirmButton;
 
@@ -19,7 +23,7 @@ namespace Core.MainMenu.Views.DialogView
 
         public override void Setup(object setupData)
         {
-            var gameplaySetupData = (GameplaySetupData) setupData;
+            var gameplaySetupData = (GameplaySetupSettingsData) setupData;
 
             Assert.IsNotNull(gameplaySetupData);
 
@@ -27,6 +31,10 @@ namespace Core.MainMenu.Views.DialogView
             _roundsCountSlider.minValue = gameplaySetupData.MinRounds;
             _roundsCountSlider.maxValue = gameplaySetupData.MaxRounds;
             _roundsCountSlider.value = _roundsCountSlider.minValue;
+
+            _minRoundsCountText.text = gameplaySetupData.MinRounds.ToString();
+            _maxRoundsCountText.text = gameplaySetupData.MaxRounds.ToString();
+            _roundsCountSlider.onValueChanged.AddListener(value => _selectedRoundsCountText.text = ((int)value).ToString());
         }
 
         public override async UniTask ShowAsync()
@@ -34,6 +42,7 @@ namespace Core.MainMenu.Views.DialogView
             _confirmButton.onClick.AddListener(() =>
             {
                 OnConfirmClicked?.Invoke();
+                HideAsync();
             });
             gameObject.SetActive(true);
         }

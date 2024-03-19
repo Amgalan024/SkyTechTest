@@ -3,7 +3,7 @@
 namespace Core.MainMenu.Models
 {
     [Serializable]
-    public class GameplaySetupData
+    public class GameplaySetupSettingsData
     {
         public int MinRounds;
         public int MaxRounds;

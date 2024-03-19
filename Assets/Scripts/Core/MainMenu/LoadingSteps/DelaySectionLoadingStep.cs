@@ -4,13 +4,13 @@ using SceneSwitchLogic.Switchers;
 
 namespace Core.MainMenu.LoadingSteps
 {
-    public class DelayLoadingStep : ILoadingStep
+    public class DelaySectionLoadingStep : ISectionLoadingStep
     {
         public string Name { get; }
 
         private readonly float _delay;
 
-        public DelayLoadingStep(string name, float delay)
+        public DelaySectionLoadingStep(string name, float delay)
         {
             Name = name;
             _delay = delay;

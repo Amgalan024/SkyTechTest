@@ -1253,10 +1253,10 @@ RectTransform:
   m_Father: {fileID: 2014398554}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1939121707
 GameObject:
@@ -1380,6 +1380,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _dialogViewPrefabs:
   - {fileID: 4120234693759032067, guid: 1d8914521d574db45ac562554f299dec, type: 3}
+  - {fileID: 5011183919703524802, guid: 09895ea9bb982f243b0876de64120324, type: 3}
+  - {fileID: 7173109424691568540, guid: 0d30a4434b320ac4996b8a23b76d8356, type: 3}
   _instantiateParent: {fileID: 1853569593}
 --- !u!1 &2011186582
 GameObject:
@@ -1525,5 +1527,5 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0

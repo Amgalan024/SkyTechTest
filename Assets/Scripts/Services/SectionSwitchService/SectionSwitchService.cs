@@ -23,13 +23,13 @@ namespace SceneSwitchLogic.Switchers
             }
         }
 
-        public void Switch(string key)
+        public void Switch(string key, params object[] switchParams)
         {
             _switchers.TryGetValue(key, out var switcher);
 
             Assert.IsNotNull(switcher);
 
-            switcher.Switch();
+            switcher.Switch(switchParams);
         }
     }
 }

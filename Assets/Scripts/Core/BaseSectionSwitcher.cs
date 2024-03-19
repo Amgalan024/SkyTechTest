@@ -1,5 +1,6 @@
 ﻿using Core;
 using Cysharp.Threading.Tasks;
+using Services.SectionSwitchService;
 using UnityEngine;
 using Utils.LoadingScreen;
 using Utils.LoadingScreen.SetupData;
@@ -30,7 +31,7 @@ namespace SceneSwitchLogic.Switchers
             _loadingScreenSetupData = loadingScreenSetupData;
         }
 
-        public async UniTask Switch()
+        public async UniTask Switch(params object[] switchParams)
         {
             _loadingScreenService.Show<DefaultLoadingScreen>(_loadingScreenSetupData);
             _loadingScreenService.SetStatus("Scene Loading", _progress);
@@ -41,6 +42,8 @@ namespace SceneSwitchLogic.Switchers
 
             _stepProgress = (1f - _progress) / (entryPoint.LoadStepsCount + 1);
             entryPoint.OnLoadStepStarted += HandleLoadStepStarted;
+
+            entryPoint.SectionSwitchParams.SwitchParams.AddRange(switchParams);
 
             await entryPoint.PreloadEntryPoint();
             entryPoint.BuildEntryPoint();

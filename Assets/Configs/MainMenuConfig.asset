@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51cf3ff19f564c31ac8574e573f8c77c, type: 3}
   m_Name: MainMenuConfig
   m_EditorClassIdentifier: 
-  <GameplaySetupData>k__BackingField:
-    MinRounds: 1
-    MaxRounds: 10
+  <GameplaySetupSettingsData>k__BackingField:
+    MinRounds: 3
+    MaxRounds: 5

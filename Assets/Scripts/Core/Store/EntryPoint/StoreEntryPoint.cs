@@ -3,6 +3,7 @@ using Core.Store.Controller;
 using Core.Store.Providers;
 using Core.Store.View;
 using Cysharp.Threading.Tasks;
+using Services.SectionSwitchService;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -28,6 +29,8 @@ namespace Core.Store.EntryPoint
 
         protected override void Configure(IContainerBuilder builder)
         {
+            builder.RegisterInstance(SectionSwitchParams);
+
             builder.RegisterInstance(_config);
             builder.RegisterInstance(_view);
 

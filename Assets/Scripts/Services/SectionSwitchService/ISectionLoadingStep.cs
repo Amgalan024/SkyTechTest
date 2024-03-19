@@ -2,7 +2,7 @@
 
 namespace SceneSwitchLogic.Switchers
 {
-    public interface ILoadingStep
+    public interface ISectionLoadingStep
     {
         string Name { get; }
         UniTask Load();

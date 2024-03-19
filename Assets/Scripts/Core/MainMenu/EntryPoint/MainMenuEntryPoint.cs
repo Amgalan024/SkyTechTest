@@ -6,6 +6,7 @@ using Core.MainMenu.Models;
 using Core.MainMenu.Views;
 using Cysharp.Threading.Tasks;
 using SceneSwitchLogic.Switchers;
+using Services.SectionSwitchService;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -20,11 +21,11 @@ namespace Core.MainMenu.EntryPoint
 
         public override int LoadStepsCount => 1;
 
-        private List<ILoadingStep> _loadingSteps = new()
+        private List<ISectionLoadingStep> _loadingSteps = new()
         {
-            new DelayLoadingStep("Step 1", 0.5f),
-            new DelayLoadingStep("Step 2", 1f),
-            new DelayLoadingStep("Step 3", 1f)
+            new DelaySectionLoadingStep("Step 1", 0.5f),
+            new DelaySectionLoadingStep("Step 2", 1f),
+            new DelaySectionLoadingStep("Step 3", 1f)
         };
 
         public override void BuildEntryPoint()
@@ -53,6 +54,8 @@ namespace Core.MainMenu.EntryPoint
 
         protected override void Configure(IContainerBuilder builder)
         {
+            builder.RegisterInstance(SectionSwitchParams);
+
             builder.RegisterInstance(_mainMenuView);
             builder.RegisterInstance(_mainMenuConfig);
 

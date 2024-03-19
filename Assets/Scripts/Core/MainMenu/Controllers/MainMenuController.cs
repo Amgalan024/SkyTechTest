@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Core.Gameplay.Models;
 using Core.MainMenu.Config;
 using Core.MainMenu.Models;
 using Core.MainMenu.Views;
 using Core.MainMenu.Views.DialogView;
 using SceneSwitchLogic.Switchers;
+using Services.SectionSwitchService;
 using UnityEngine;
 using Utils.BackButtonClickDetector;
 using Utils.DialogView;
@@ -15,10 +18,11 @@ namespace Core.MainMenu.Controller
 {
     public class MainMenuController : IInitializable, IDisposable
     {
+        private readonly SectionSwitchParams _sectionSwitchParams;
+
         private MainMenuModel _model;
-        private MainMenuView _view;
-        private MainMenuConfig _config;
-        private GameplaySetupDialogView _gameplaySetupDialog;
+        private readonly MainMenuView _view;
+        private readonly MainMenuConfig _config;
 
         private readonly DialogViewService _dialogViewService;
         private readonly ISaveDataService _saveDataService;
@@ -26,9 +30,12 @@ namespace Core.MainMenu.Controller
 
         private readonly List<Action> _disposeActions = new();
 
-        public MainMenuController(MainMenuView view, MainMenuModel model, MainMenuConfig config, SectionSwitchService sectionSwitchService,
-            DialogViewService dialogViewService)
+        private GameplaySetupDialogView _gameplaySetupDialog;
+
+        public MainMenuController(SectionSwitchParams sectionSwitchParams, MainMenuView view, MainMenuModel model,
+            MainMenuConfig config, SectionSwitchService sectionSwitchService, DialogViewService dialogViewService)
         {
+            _sectionSwitchParams = sectionSwitchParams;
             _view = view;
             _model = model;
             _config = config;
@@ -38,6 +45,14 @@ namespace Core.MainMenu.Controller
 
         void IInitializable.Initialize()
         {
+            var gameResult =
+                _sectionSwitchParams.SwitchParams.FirstOrDefault(p => p.GetType() == typeof(GameplayResult));
+
+            if (gameResult != null)
+            {
+                _dialogViewService.ShowAsync<GameplayResultDialogView>(gameResult);
+            }
+
             _view.OnStartClicked += HandleStartClicked;
             _view.OnStoreClicked += HandleStoreClicked;
             BackButtonClickDetector.Instance.OnBackButtonClicked += QuitApplication;
@@ -65,7 +80,7 @@ namespace Core.MainMenu.Controller
         private async void HandleStartClicked()
         {
             _gameplaySetupDialog =
-                await _dialogViewService.ShowAsync<GameplaySetupDialogView>(_config.GameplaySetupData);
+                await _dialogViewService.ShowAsync<GameplaySetupDialogView>(_config.GameplaySetupSettingsData);
             _gameplaySetupDialog.OnConfirmClicked += StartGameplay;
 
             _disposeActions.Add(() => { _gameplaySetupDialog.OnConfirmClicked -= StartGameplay; });
@@ -73,7 +88,9 @@ namespace Core.MainMenu.Controller
 
         private void StartGameplay()
         {
-            _sectionSwitchService.Switch("Gameplay");
+            var gameSettings = new GameplaySettings("Game 1");
+
+            _sectionSwitchService.Switch("Gameplay", gameSettings);
         }
 
         private void QuitApplication()

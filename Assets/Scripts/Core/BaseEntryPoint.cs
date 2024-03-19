@@ -1,5 +1,6 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
+using Services.SectionSwitchService;
 using VContainer.Unity;
 
 namespace Core
@@ -10,6 +11,8 @@ namespace Core
 
         //todo: выделить метод в отдельный интерфейс IPreload
         public abstract int LoadStepsCount { get; }
+
+        public SectionSwitchParams SectionSwitchParams { get; } = new();
 
         public abstract void BuildEntryPoint();
 
