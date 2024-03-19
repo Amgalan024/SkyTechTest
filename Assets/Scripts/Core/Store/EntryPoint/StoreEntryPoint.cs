@@ -1,5 +1,7 @@
-﻿using Core.Store.Controller;
+﻿using Core.Store.Configs;
+using Core.Store.Controller;
 using Core.Store.Providers;
+using Core.Store.View;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using VContainer;
@@ -9,8 +11,9 @@ namespace Core.Store.EntryPoint
 {
     public class StoreEntryPoint : BaseEntryPoint
     {
-        //todo: Вынести в конфиг
-        [SerializeField] private TextAsset _products;
+        [SerializeField] private StoreConfig _config;
+        [SerializeField] private StoreView _view;
+        
         public override int LoadStepsCount { get; }
 
         public override async UniTask PreloadEntryPoint()
@@ -25,6 +28,9 @@ namespace Core.Store.EntryPoint
 
         protected override void Configure(IContainerBuilder builder)
         {
+            builder.RegisterInstance(_config);
+            builder.RegisterInstance(_view);
+
             ConfigureLocalProductsProvider(builder);
 
             builder.RegisterEntryPoint<StoreController>();
@@ -39,7 +45,7 @@ namespace Core.Store.EntryPoint
         private void ConfigureLocalProductsProvider(IContainerBuilder builder)
         {
             builder.Register<LocalProductsProvider>(Lifetime.Singleton).AsImplementedInterfaces()
-                .WithParameter("productsJson", _products.text);
+                .WithParameter("productsJson", _config.Products.text);
         }
     }
 }

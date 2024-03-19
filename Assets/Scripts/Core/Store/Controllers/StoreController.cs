@@ -13,9 +13,8 @@ namespace Core.Store.Controller
     public class StoreController : IInitializable
     {
         private readonly IProductsProvider _productsProvider;
-        private Products _products;
-        private StoreConfig _config;
-        private StoreView _storeView;
+        private readonly StoreConfig _config;
+        private readonly StoreView _storeView;
 
         private readonly Dictionary<Type, Type> _productTypeToProductViewDict = new()
         {
@@ -23,9 +22,13 @@ namespace Core.Store.Controller
             {typeof(ItemPackProduct), typeof(ItemPackProductView)}
         };
 
-        public StoreController(IProductsProvider productsProvider)
+        private Products _products;
+
+        public StoreController(IProductsProvider productsProvider, StoreConfig config, StoreView storeView)
         {
             _productsProvider = productsProvider;
+            _config = config;
+            _storeView = storeView;
         }
 
         public async void Initialize()
@@ -38,9 +41,7 @@ namespace Core.Store.Controller
 
                 var itemViewPrefab = _config.BaseItemViewPrefabs.FirstOrDefault(p => p.GetType() == itemViewType);
 
-                var itemView = Object.Instantiate(itemViewPrefab, _storeView.InstantiateParent);
-
-                _storeView.AddProductView(itemView);
+                var itemView = Object.Instantiate(itemViewPrefab, _storeView.ProductLayoutGroup.transform);
             }
         }
     }

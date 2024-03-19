@@ -16,8 +16,6 @@ namespace Core.Store.View
 
             Assert.IsNotNull(productData);
 
-            //todo: Придумать иной способ брать названия, сделать отдельный конфиг
-            //с подробным описанием покупок, соотносить по ключу и брать нужные данные(имя, подробное описание, иконка и т.д) 
             _header.text = productData.key;
             _description.text = $"Currency: {productData.key} \nAmount :{productData.amount}";
         }

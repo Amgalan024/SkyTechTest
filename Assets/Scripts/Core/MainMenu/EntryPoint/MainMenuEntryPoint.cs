@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using Core.MainMenu.Config;
+using Core.MainMenu.Controller;
 using Core.MainMenu.LoadingSteps;
+using Core.MainMenu.Models;
 using Core.MainMenu.Views;
 using Cysharp.Threading.Tasks;
 using SceneSwitchLogic.Switchers;
 using UnityEngine;
 using VContainer;
+using VContainer.Unity;
 
 namespace Core.MainMenu.EntryPoint
 {
@@ -21,7 +24,7 @@ namespace Core.MainMenu.EntryPoint
         {
             new DelayLoadingStep("Step 1", 0.5f),
             new DelayLoadingStep("Step 2", 1f),
-            new DelayLoadingStep("Step 3", 1f),
+            new DelayLoadingStep("Step 3", 1f)
         };
 
         public override void BuildEntryPoint()
@@ -52,6 +55,9 @@ namespace Core.MainMenu.EntryPoint
         {
             builder.RegisterInstance(_mainMenuView);
             builder.RegisterInstance(_mainMenuConfig);
+
+            builder.Register<MainMenuModel>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<MainMenuController>();
         }
     }
 }

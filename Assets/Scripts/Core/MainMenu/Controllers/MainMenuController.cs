@@ -26,14 +26,12 @@ namespace Core.MainMenu.Controller
 
         private readonly List<Action> _disposeActions = new();
 
-        public MainMenuController(MainMenuView view, MainMenuModel model, MainMenuConfig config,
-            ISaveDataService saveDataService, SceneSwitchService sceneSwitchService,
+        public MainMenuController(MainMenuView view, MainMenuModel model, MainMenuConfig config, SceneSwitchService sceneSwitchService,
             DialogViewService dialogViewService)
         {
             _view = view;
             _model = model;
             _config = config;
-            _saveDataService = saveDataService;
             _sceneSwitchService = sceneSwitchService;
             _dialogViewService = dialogViewService;
         }
@@ -61,6 +59,7 @@ namespace Core.MainMenu.Controller
 
         private void HandleStoreClicked()
         {
+            _view.OpenStore();
         }
 
         private async void HandleStartClicked()

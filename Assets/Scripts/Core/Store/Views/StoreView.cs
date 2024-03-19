@@ -5,13 +5,28 @@ namespace Core.Store.View
 {
     public class StoreView : MonoBehaviour
     {
-        [field: SerializeField] public Transform InstantiateParent { get; private set; }
+        [field: SerializeField] public LayoutGroup ProductLayoutGroup { get; private set; }
 
-        [SerializeField] private LayoutGroup _layoutGroup;
+        [SerializeField] private Button _closeButton;
 
-        public void AddProductView(BaseProductView productView)
+        private void OnEnable()
         {
-            productView.transform.SetParent(_layoutGroup.transform);
+            _closeButton.onClick.AddListener(Hide);
+        }
+
+        private void OnDisable()
+        {
+            _closeButton.onClick.RemoveListener(Hide);
+        }
+
+        public void Show()
+        {
+            gameObject.SetActive(true);
+        }
+
+        public void Hide()
+        {
+            gameObject.SetActive(false);
         }
     }
 }

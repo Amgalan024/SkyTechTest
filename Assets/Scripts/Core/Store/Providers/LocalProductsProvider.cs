@@ -26,7 +26,6 @@ namespace Core.Store.Providers
 
         public UniTask<Products> GetProducts()
         {
-            _products = GetProductsVar1();
             _products = GetProductsVar2();
 
             return new UniTask<Products>(_products);

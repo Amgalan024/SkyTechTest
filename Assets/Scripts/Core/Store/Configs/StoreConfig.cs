@@ -8,5 +8,6 @@ namespace Core.Store.Configs
     public class StoreConfig : ScriptableObject
     {
         [field: SerializeField] public List<BaseProductView> BaseItemViewPrefabs { get; private set; }
+        [field: SerializeField] public TextAsset Products { get; private set; }
     }
 }
