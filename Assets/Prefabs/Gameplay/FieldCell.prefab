@@ -183,6 +183,7 @@ GameObject:
   - component: {fileID: 208558575350116357}
   - component: {fileID: 208558575350116355}
   - component: {fileID: 208558575350116354}
+  - component: {fileID: 7632809457190562779}
   m_Layer: 0
   m_Name: FieldCell
   m_TagString: Untagged
@@ -271,4 +272,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spriteRenderer: {fileID: 208558575350116355}
+  _boxCollider2D: {fileID: 7632809457190562779}
   _idText: {fileID: 208558574231157366}
+--- !u!61 &7632809457190562779
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 208558575350116356}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0.25, y: 0.25, z: 0.25, w: 0.25}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.984375, y: 0.984375}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 1
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.984375, y: 0.984375}
+  m_EdgeRadius: 0

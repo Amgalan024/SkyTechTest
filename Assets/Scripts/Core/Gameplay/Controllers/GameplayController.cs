@@ -84,7 +84,8 @@ namespace Core.Gameplay.Controllers
 
             if (CheckLineWinLenght(fieldCellModel))
             {
-                await UniTask.Delay(TimeSpan.FromSeconds(3)); //todo: добавить анимацию победы с показом очков и чет там еще по ТЗ
+                await UniTask.Delay(TimeSpan
+                    .FromSeconds(1)); //todo: добавить анимацию победы с показом очков и чет там еще по ТЗ
 
                 var gameResult = new GameplayResult(fieldCellModel.ClaimedById);
 
@@ -103,19 +104,18 @@ namespace Core.Gameplay.Controllers
             _currentTurnInputStrategy.Value.OnInput += SetTextTurn;
             _currentTurnInputStrategy.Value.HandleInput();
         }
-        
+
         private void ClaimFieldCellView(FieldCellModel fieldCellModel)
         {
             var fieldCellView = _fieldConstructor.FieldCellViewsByModel[fieldCellModel];
-            fieldCellView.SetClaimed(fieldCellModel.ClaimedById);//todo:в будущем во вьюшку пойдет не id а какой нить спрайт доделать
+            fieldCellView.SetClaimed(fieldCellModel.ClaimedById); //todo:в будущем во вьюшку пойдет не id а какой нить спрайт доделать
         }
 
         private bool CheckLineWinLenght(FieldCellModel fieldCellModel)
         {
             foreach (var lineWinDirection in _lineWinDirections)
             {
-                //todo: отрефакторить убрать копипаст выделить в методы
-                var lineLenght = 0;
+                var lineLenght = 1;
 
                 var directions = new[]
                 {
@@ -125,40 +125,26 @@ namespace Core.Gameplay.Controllers
 
                 foreach (var direction in directions)
                 {
-                    var newPosition = fieldCellModel.GridPosition + direction;
-                    var newCellField =
-                        _fieldConstructor.FieldCellModels.FirstOrDefault(c => c.GridPosition == newPosition);
+                    var nextPosition = fieldCellModel.GridPosition + direction;
+                    var nextCellField =
+                        _fieldConstructor.FieldCellModels.FirstOrDefault(c => c.GridPosition == nextPosition);
 
-                    while (newCellField != null)
+                    while (nextCellField != null)
                     {
-                        newPosition += direction;
-                        newCellField =
-                            _fieldConstructor.FieldCellModels.FirstOrDefault(c => c.GridPosition == newPosition);
-                        lineLenght++;
+                        if (nextCellField.ClaimedById == fieldCellModel.ClaimedById)
+                        {
+                            lineLenght++;
+                        }
+                        else
+                        {
+                            break;
+                        }
+
+                        nextPosition += direction;
+                        nextCellField =
+                            _fieldConstructor.FieldCellModels.FirstOrDefault(c => c.GridPosition == nextPosition);
                     }
                 }
-
-                // //Подсчет длины линии в направлении
-                // var newPosition = fieldCellModel.GridPosition + winDirection;
-                // var newCellField = _fieldConstructor.FieldCellModels.FirstOrDefault(c => c.GridPosition == newPosition);
-                //
-                // while (newCellField != null)
-                // {
-                //     newPosition += winDirection;
-                //     newCellField = _fieldConstructor.FieldCellModels.FirstOrDefault(c => c.GridPosition == newPosition);
-                //     lineLenght++;
-                // }
-                //
-                // //Подсчет длины линии в противоположном направлении
-                // newPosition = fieldCellModel.GridPosition - winDirection;
-                // newCellField = _fieldConstructor.FieldCellModels.FirstOrDefault(c => c.GridPosition == newPosition);
-                //
-                // while (newCellField != null)
-                // {
-                //     newPosition -= winDirection;
-                //     newCellField = _fieldConstructor.FieldCellModels.FirstOrDefault(c => c.GridPosition == newPosition);
-                //     lineLenght++;
-                // }
 
                 if (lineLenght >= _gameplaySettings.LineWinLenght)
                 {
@@ -167,13 +153,6 @@ namespace Core.Gameplay.Controllers
             }
 
             return false;
-        }
-
-        private bool CheckInFieldBounds(Vector2 gridPosition, int fieldSize)
-        {
-            var xInBounds = gridPosition.x >= 0 && gridPosition.x >= fieldSize;
-            var yInBounds = gridPosition.y >= 0 && gridPosition.y >= fieldSize;
-            return xInBounds && yInBounds;
         }
     }
 }

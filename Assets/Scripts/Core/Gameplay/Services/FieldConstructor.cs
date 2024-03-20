@@ -22,7 +22,7 @@ namespace Core.Gameplay
         }
 
         /// <summary>
-        /// Сетка вида
+        /// Сетка с координатами вида
         ///   0 1 2 3 4 → X координаты
         /// 0 x x x x x
         /// 1 x x x x x
@@ -37,7 +37,7 @@ namespace Core.Gameplay
         {
             var centerPosition = _fieldView.CenterPoint.position;
 
-            var cellOffset = _fieldView.Size / (size - 1);
+            var cellOffset = _fieldView.Size / (float)(size - 1);
             var cellSize = cellOffset; //todo: вычислить с учетом расстояния между клетками
 
             var startPositionX = centerPosition.x - (_fieldView.Size / 2f);

@@ -10,6 +10,7 @@ namespace Core.Gameplay.Views
         public event Action<FieldCellView> OnClicked;
 
         [SerializeField] private SpriteRenderer _spriteRenderer;
+        [SerializeField] private BoxCollider2D _boxCollider2D;
         [SerializeField] private TextMeshPro _idText;
 
         /// <summary>
@@ -22,9 +23,10 @@ namespace Core.Gameplay.Views
             _idText.text = id;
         }
 
-        public void SetSize(int size)
+        public void SetSize(float size)
         {
             _spriteRenderer.size = Vector2.one * size;
+            _boxCollider2D.size = Vector2.one * size;
         }
 
         public void OnPointerClick(PointerEventData eventData)
