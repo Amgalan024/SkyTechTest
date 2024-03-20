@@ -1,12 +1,11 @@
-﻿using Core;
-using Cysharp.Threading.Tasks;
-using Services.SectionSwitchService;
+﻿using Cysharp.Threading.Tasks;
+using SceneSwitchLogic.Switchers;
+using Services.LoadingScreen;
+using Services.LoadingScreen.SetupData;
+using Services.SceneLoader;
 using UnityEngine;
-using Utils.LoadingScreen;
-using Utils.LoadingScreen.SetupData;
-using Utils.SceneLoader;
 
-namespace SceneSwitchLogic.Switchers
+namespace Core
 {
     public class BaseSectionSwitcher : ISectionSwitcher
     {
@@ -39,20 +38,26 @@ namespace SceneSwitchLogic.Switchers
             _progress += 0.5f;
             var entryPointHolder = Object.FindObjectOfType<EntryPointHolder>();
             var entryPoint = entryPointHolder.EntryPoint;
-
-            _stepProgress = (1f - _progress) / (entryPoint.LoadStepsCount + 1);
-            entryPoint.OnLoadStepStarted += HandleLoadStepStarted;
-
             entryPoint.SectionSwitchParams.SwitchParams.AddRange(switchParams);
 
-            await entryPoint.PreloadEntryPoint();
+            _stepProgress = (1f - _progress);
+
+            if (entryPoint is IPreloadEntryPoint preloadEntryPoint)
+            {
+                _stepProgress = (1f - _progress) / (preloadEntryPoint.LoadStepsCount + 1);
+                preloadEntryPoint.OnLoadStepStarted += HandleLoadStepStarted;
+
+                await preloadEntryPoint.PreloadEntryPoint();
+
+                preloadEntryPoint.OnLoadStepStarted -= HandleLoadStepStarted;
+            }
+
             entryPoint.BuildEntryPoint();
 
             _progress += _stepProgress;
             _loadingScreenService.SetStatus("Completed", _progress);
 
             _loadingScreenService.Close<DefaultLoadingScreen>();
-            entryPoint.OnLoadStepStarted -= HandleLoadStepStarted;
         }
 
         private void HandleLoadStepStarted(string loadingStepName)

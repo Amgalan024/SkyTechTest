@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Utils.LoadingScreen.SetupData
+namespace Services.LoadingScreen.SetupData
 {
     [Serializable]
     public class DefaultLoadingScreenSetupData

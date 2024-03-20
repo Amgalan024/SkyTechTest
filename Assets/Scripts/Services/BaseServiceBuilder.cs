@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using VContainer;
 
-namespace Utils
+namespace Services
 {
     public abstract class BaseServiceBuilder : MonoBehaviour
     {

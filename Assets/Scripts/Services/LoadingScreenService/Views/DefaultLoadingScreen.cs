@@ -1,10 +1,10 @@
-﻿using TMPro;
+﻿using Services.LoadingScreen.SetupData;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
-using Utils.LoadingScreen.SetupData;
 
-namespace Utils.LoadingScreen
+namespace Services.LoadingScreen
 {
     public class DefaultLoadingScreen : BaseLoadingScreenView
     {

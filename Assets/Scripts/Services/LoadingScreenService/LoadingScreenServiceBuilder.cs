@@ -2,7 +2,7 @@
 using UnityEngine;
 using VContainer;
 
-namespace Utils.LoadingScreen
+namespace Services.LoadingScreen
 {
     public class LoadingScreenServiceBuilder : BaseServiceBuilder
     {

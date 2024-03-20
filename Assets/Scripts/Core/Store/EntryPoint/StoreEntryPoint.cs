@@ -1,9 +1,8 @@
 ﻿using Core.Store.Configs;
-using Core.Store.Controller;
+using Core.Store.Controllers;
 using Core.Store.Providers;
-using Core.Store.View;
+using Core.Store.Views;
 using Cysharp.Threading.Tasks;
-using Services.SectionSwitchService;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -15,13 +14,6 @@ namespace Core.Store.EntryPoint
         [SerializeField] private StoreConfig _config;
         [SerializeField] private StoreView _view;
         
-        public override int LoadStepsCount { get; }
-
-        public override async UniTask PreloadEntryPoint()
-        {
-            //В будущем инициализация удаленного провайдера покупок
-        }
-
         public override void BuildEntryPoint()
         {
             Build();

@@ -1,4 +1,4 @@
-﻿namespace Utils.SavedDataProvider
+﻿namespace Services.SavedDataProvider
 {
     public interface ISaveDataService 
     {

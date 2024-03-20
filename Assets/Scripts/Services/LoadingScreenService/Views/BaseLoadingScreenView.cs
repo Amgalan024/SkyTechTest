@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Utils.LoadingScreen
+namespace Services.LoadingScreen
 {
     public abstract class BaseLoadingScreenView : MonoBehaviour
     {

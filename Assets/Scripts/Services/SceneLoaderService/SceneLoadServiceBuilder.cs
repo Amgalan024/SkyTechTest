@@ -1,6 +1,6 @@
 ﻿using VContainer;
 
-namespace Utils.SceneLoader
+namespace Services.SceneLoader
 {
     public class SceneLoadServiceBuilder : BaseServiceBuilder
     {

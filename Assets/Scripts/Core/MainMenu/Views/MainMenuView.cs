@@ -1,5 +1,5 @@
 ﻿using System;
-using Core.Store.View;
+using Core.Store.Views;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine.Assertions;
 
-namespace Utils.LoadingScreen
+namespace Services.LoadingScreen
 {
     public class LoadingScreenProvider
     {

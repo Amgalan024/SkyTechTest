@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Utils.DialogView.Views
+namespace Services.DialogView.Views
 {
     public abstract class BaseDialogView : MonoBehaviour
     {

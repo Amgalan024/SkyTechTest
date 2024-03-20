@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
-using Utils.DialogView.Views;
+using Services.DialogView.Views;
 
 namespace Core.MainMenu.Views.DialogView
 {

@@ -1,4 +1,4 @@
-﻿namespace Utils.DialogView.SetupData
+﻿namespace Services.DialogView.SetupData
 {
     public class ConfirmationSetupData
     {

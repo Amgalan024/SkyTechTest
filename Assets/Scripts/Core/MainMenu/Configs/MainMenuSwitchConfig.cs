@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using Utils.LoadingScreen.SetupData;
+using Services.LoadingScreen.SetupData;
 
-namespace SceneSwitchLogic.Switchers
+namespace Core.MainMenu.Config
 {
     [CreateAssetMenu(fileName = nameof(MainMenuSwitchConfig), menuName = "Configs/SwitchConfigs/" + nameof(MainMenuSwitchConfig))]
     public class MainMenuSwitchConfig : ScriptableObject

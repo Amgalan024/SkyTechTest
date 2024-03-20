@@ -1,7 +1,7 @@
 ﻿using Core.Startup.Config;
 using SceneSwitchLogic.Switchers;
-using Utils.LoadingScreen;
-using Utils.SceneLoader;
+using Services.LoadingScreen;
+using Services.SceneLoader;
 using VContainer.Unity;
 
 namespace Core.Startup

@@ -1,7 +1,7 @@
 ﻿using Core.Gameplay.Config;
-using SceneSwitchLogic.Switchers;
+using Core.MainMenu.Config;
+using Services.LoadingScreen.SetupData;
 using UnityEngine;
-using Utils.LoadingScreen.SetupData;
 
 namespace Core.Startup.Config
 {

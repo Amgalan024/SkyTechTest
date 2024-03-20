@@ -1,6 +1,6 @@
 ﻿using VContainer;
 
-namespace Utils.SavedDataProvider
+namespace Services.SavedDataProvider
 {
     public class SaveDataServiceBuilder : BaseServiceBuilder
     {

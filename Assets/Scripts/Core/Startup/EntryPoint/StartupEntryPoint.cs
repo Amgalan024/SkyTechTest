@@ -2,8 +2,8 @@ using Core.Startup;
 using Core.Startup.Config;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using Utils.LoadingScreen;
-using Utils.LoadingScreen.SetupData;
+using Services.LoadingScreen;
+using Services.LoadingScreen.SetupData;
 using VContainer;
 using VContainer.Unity;
 

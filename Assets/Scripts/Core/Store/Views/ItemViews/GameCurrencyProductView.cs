@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace Core.Store.View
+namespace Core.Store.Views
 {
     public class GameCurrencyProductView : BaseProductView
     {

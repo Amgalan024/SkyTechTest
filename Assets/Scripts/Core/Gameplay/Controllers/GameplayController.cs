@@ -5,13 +5,13 @@ using Core.Gameplay.InputStrategies;
 using Core.Gameplay.Models;
 using Core.Gameplay.Views;
 using SceneSwitchLogic.Switchers;
+using Services.DialogView;
+using Services.DialogView.SetupData;
+using Services.DialogView.Views;
+using Services.SavedDataProvider;
 using Services.SectionSwitchService;
 using UnityEngine;
 using UnityEngine.Assertions;
-using Utils.DialogView;
-using Utils.DialogView.SetupData;
-using Utils.DialogView.Views;
-using Utils.SavedDataProvider;
 using VContainer.Unity;
 
 namespace Core.Gameplay.Controllers
@@ -69,6 +69,10 @@ namespace Core.Gameplay.Controllers
             _view.SetPlayerName(_gameplaySettings.PlayerName);
             _view.SetOpponentName(_gameplaySettings.OpponentName);
             _view.SetRoundsCounterStatus(0, _gameplaySettings.TotalRounds);
+
+            _view.PauseView.OnResumeClicked += OnResumeClicked;
+            _view.PauseView.OnMainMenuClicked += OnMainMenuClicked;
+
             StartGameplay();
         }
 
@@ -79,8 +83,8 @@ namespace Core.Gameplay.Controllers
             _view.OnPauseClicked -= OnPauseClicked;
             _currentTurnInputStrategy.Value.OnInput -= SetTextTurn;
             _gameTimer.OnTick -= _view.SetTime;
-            _view.PauseView.OnResumeClicked -= ResumeGame;
-            _view.PauseView.OnMainMenuClicked -= ExitToMainMenu;
+            _view.PauseView.OnResumeClicked -= OnResumeClicked;
+            _view.PauseView.OnMainMenuClicked -= OnMainMenuClicked;
 
             foreach (var disposeAction in _disposeActions)
             {
@@ -92,23 +96,22 @@ namespace Core.Gameplay.Controllers
         {
             _gameTimer.Pause();
             _view.PauseView.Show();
-            _view.PauseView.OnResumeClicked += ResumeGame;
-            _view.PauseView.OnMainMenuClicked += ExitToMainMenu;
         }
 
-        private void ResumeGame()
+        private void OnResumeClicked()
         {
             _gameTimer.Resume();
             _view.PauseView.Hide();
         }
 
-        private async void ExitToMainMenu()
+        private async void OnMainMenuClicked()
         {
             var confirmationSetupData = new ConfirmationSetupData()
             {
                 HeaderText = "Exit", DescriptionText = "You sure you want to exit?"
             };
 
+            //todo: сделать два метода в диалог сервисе, показ сингтон окна и показ мультипл инстанс окна
             _exitConfirmationDialog = await _dialogViewService.ShowAsync<ConfirmationDialogView>(confirmationSetupData);
 
             _exitConfirmationDialog.OnConfirmClicked += OnMainMenuExitConfirmed;
@@ -194,8 +197,7 @@ namespace Core.Gameplay.Controllers
         private void ClaimFieldCellView(FieldCellModel fieldCellModel)
         {
             var fieldCellView = _fieldConstructor.FieldCellViewsByModel[fieldCellModel];
-            fieldCellView.SetClaimed(fieldCellModel
-                .ClaimedById); //todo:в будущем во вьюшку пойдет не id а какой нить спрайт доделать
+            fieldCellView.SetClaimed(fieldCellModel.ClaimedById);
         }
 
         private bool CheckLineWinLenght(FieldCellModel fieldCellModel)

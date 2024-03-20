@@ -7,16 +7,16 @@ using Core.MainMenu.Models;
 using Core.MainMenu.Views;
 using Core.MainMenu.Views.DialogView;
 using SceneSwitchLogic.Switchers;
+using Services.DialogView;
+using Services.DialogView.SetupData;
+using Services.DialogView.Views;
+using Services.SavedDataProvider;
 using Services.SectionSwitchService;
 using UnityEngine;
 using Utils.BackButtonClickDetector;
-using Utils.DialogView;
-using Utils.DialogView.SetupData;
-using Utils.DialogView.Views;
-using Utils.SavedDataProvider;
 using VContainer.Unity;
 
-namespace Core.MainMenu.Controller
+namespace Core.MainMenu.Controllers
 {
     public class MainMenuController : IInitializable, IDisposable
     {

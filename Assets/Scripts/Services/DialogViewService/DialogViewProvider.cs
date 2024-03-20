@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Services.DialogView.Views;
 using UnityEngine;
 using UnityEngine.Assertions;
-using Utils.DialogView.Views;
 
-namespace Utils.DialogView
+namespace Services.DialogView
 {
     public class DialogViewProvider
     {

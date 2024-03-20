@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Utils.SavedDataProvider
+namespace Services.SavedDataProvider
 {
     public class PlayerPrefsDataService : ISaveDataService
     {

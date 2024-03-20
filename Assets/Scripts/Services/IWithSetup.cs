@@ -1,6 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 
-namespace Utils
+namespace Services
 {
     public interface IWithSetup
     {

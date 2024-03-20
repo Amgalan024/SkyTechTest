@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
-using Utils.DialogView.Views;
+using Services.DialogView.Views;
 
 namespace Core.Store.Dialogs
 {

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
+using Services.DialogView.Views;
 using UnityEngine;
-using Utils.DialogView.Views;
 using VContainer;
 
-namespace Utils.DialogView
+namespace Services.DialogView
 {
     public class DialogViewServiceBuilder : BaseServiceBuilder
     {

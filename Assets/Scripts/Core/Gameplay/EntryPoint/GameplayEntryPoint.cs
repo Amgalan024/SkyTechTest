@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Core.Gameplay.Controllers;
 using Core.Gameplay.Views;
 using Core.MainMenu.LoadingSteps;
@@ -10,12 +11,13 @@ using VContainer.Unity;
 
 namespace Core.Gameplay.EntryPoint
 {
-    public class GameplayEntryPoint : BaseEntryPoint
+    public class GameplayEntryPoint : BaseEntryPoint, IPreloadEntryPoint
     {
+        public event Action<string> OnLoadStepStarted;
         [SerializeField] private GameplayView _gameplayView;
         [SerializeField] private FieldView _fieldView;
         [SerializeField] private FieldCellView _fieldCellPrefab;
-        public override int LoadStepsCount { get; }
+        public int LoadStepsCount => _loadingSteps.Count;
 
         private List<ISectionLoadingStep> _loadingSteps = new()
         {
@@ -24,18 +26,18 @@ namespace Core.Gameplay.EntryPoint
             new DelaySectionLoadingStep("Step 3", 1f)
         };
 
-        public override void BuildEntryPoint()
-        {
-            Build();
-        }
-
-        public override async UniTask PreloadEntryPoint()
+        async UniTask IPreloadEntryPoint.PreloadEntryPoint()
         {
             foreach (var loadingStep in _loadingSteps)
             {
-                InvokeLoadStepStart(loadingStep.Name);
+                OnLoadStepStarted?.Invoke(loadingStep.Name);
                 await loadingStep.Load();
             }
+        }
+
+        public override void BuildEntryPoint()
+        {
+            Build();
         }
 
         protected override void Configure(IContainerBuilder builder)

@@ -5,14 +5,14 @@ using Core.Store.Configs;
 using Core.Store.Dialogs;
 using Core.Store.Models;
 using Core.Store.Providers;
-using Core.Store.View;
+using Core.Store.Views;
 using Cysharp.Threading.Tasks;
-using Utils.DialogView;
+using Services.DialogView;
 using VContainer.Unity;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
-namespace Core.Store.Controller
+namespace Core.Store.Controllers
 {
     public class StoreController : IInitializable, IDisposable
     {

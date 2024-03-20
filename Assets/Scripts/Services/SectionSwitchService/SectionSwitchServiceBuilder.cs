@@ -1,5 +1,5 @@
 ﻿using SceneSwitchLogic.Switchers;
-using Utils;
+using Services;
 using VContainer;
 
 namespace SceneSwitchLogic.EntryPoint

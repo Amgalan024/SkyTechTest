@@ -1,8 +1,8 @@
 ﻿using Cysharp.Threading.Tasks;
+using Services.DialogView.Views;
 using UnityEngine.Assertions;
-using Utils.DialogView.Views;
 
-namespace Utils.DialogView
+namespace Services.DialogView
 {
     public class DialogViewService
     {

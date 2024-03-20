@@ -1,12 +1,12 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
+using Services.DialogView.SetupData;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
-using Utils.DialogView.SetupData;
 
-namespace Utils.DialogView.Views
+namespace Services.DialogView.Views
 {
     //Мб будет подходить под разновидность окна с выбором опций по кнопкам хз и придется убрать отдельный класс
     public class ConfirmationDialogView : BaseDialogView

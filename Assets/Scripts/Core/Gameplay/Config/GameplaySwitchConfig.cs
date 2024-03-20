@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using Utils.LoadingScreen.SetupData;
+using Services.LoadingScreen.SetupData;
 
 namespace Core.Gameplay.Config
 {

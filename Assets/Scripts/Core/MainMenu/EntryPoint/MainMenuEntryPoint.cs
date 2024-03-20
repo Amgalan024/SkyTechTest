@@ -1,25 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Core.MainMenu.Config;
-using Core.MainMenu.Controller;
+using Core.MainMenu.Controllers;
 using Core.MainMenu.LoadingSteps;
 using Core.MainMenu.Models;
 using Core.MainMenu.Views;
 using Cysharp.Threading.Tasks;
 using SceneSwitchLogic.Switchers;
-using Services.SectionSwitchService;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
 namespace Core.MainMenu.EntryPoint
 {
-    public class MainMenuEntryPoint : BaseEntryPoint
+    public class MainMenuEntryPoint : BaseEntryPoint, IPreloadEntryPoint
     {
+        public event Action<string> OnLoadStepStarted;
+
         [SerializeField] private MainMenuView _mainMenuView;
         [SerializeField] private MainMenuConfig _mainMenuConfig;
         [SerializeField] private BaseEntryPoint[] _subEntryPoints;
 
-        public override int LoadStepsCount => 1;
+        public int LoadStepsCount => _loadingSteps.Count;
 
         private List<ISectionLoadingStep> _loadingSteps = new()
         {
@@ -28,6 +30,23 @@ namespace Core.MainMenu.EntryPoint
             new DelaySectionLoadingStep("Step 3", 1f)
         };
 
+        async UniTask IPreloadEntryPoint.PreloadEntryPoint()
+        {
+            foreach (var entryPoint in _subEntryPoints)
+            {
+                if (entryPoint is IPreloadEntryPoint preloadEntryPoint)
+                {
+                    await preloadEntryPoint.PreloadEntryPoint();
+                }
+            }
+
+            foreach (var loadingStep in _loadingSteps)
+            {
+                OnLoadStepStarted?.Invoke(loadingStep.Name);
+                await loadingStep.Load();
+            }
+        }
+
         public override void BuildEntryPoint()
         {
             Build();
@@ -35,20 +54,6 @@ namespace Core.MainMenu.EntryPoint
             foreach (var entryPoint in _subEntryPoints)
             {
                 entryPoint.BuildEntryPoint();
-            }
-        }
-
-        public override async UniTask PreloadEntryPoint()
-        {
-            foreach (var entryPoint in _subEntryPoints)
-            {
-                await entryPoint.PreloadEntryPoint();
-            }
-
-            foreach (var loadingStep in _loadingSteps)
-            {
-                InvokeLoadStepStart(loadingStep.Name);
-                await loadingStep.Load();
             }
         }
 

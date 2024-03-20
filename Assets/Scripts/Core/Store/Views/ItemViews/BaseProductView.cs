@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Core.Store.View
+namespace Core.Store.Views
 {
     public abstract class BaseProductView : MonoBehaviour
     {

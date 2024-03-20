@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Core.Store.View;
+using Core.Store.Views;
 using UnityEngine;
 
 namespace Core.Store.Configs

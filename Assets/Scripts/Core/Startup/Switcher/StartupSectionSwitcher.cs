@@ -1,8 +1,8 @@
 ﻿using Cysharp.Threading.Tasks;
 using SceneSwitchLogic.Switchers;
+using Services.LoadingScreen;
+using Services.SceneLoader;
 using UnityEngine;
-using Utils.LoadingScreen;
-using Utils.SceneLoader;
 
 namespace Core.Startup
 {
@@ -35,18 +35,23 @@ namespace Core.Startup
 
             var entryPointHolder = Object.FindObjectOfType<EntryPointHolder>();
             var entryPoint = entryPointHolder.EntryPoint;
+            _stepProgress = (1f - _progress);
 
-            _stepProgress = (1f - _progress) / (entryPoint.LoadStepsCount + 1);
-            entryPoint.OnLoadStepStarted += HandleLoadStepStarted;
+            if (entryPoint is IPreloadEntryPoint preloadEntryPoint)
+            {
+                _stepProgress = (1f - _progress) / (preloadEntryPoint.LoadStepsCount + 1);
+                preloadEntryPoint.OnLoadStepStarted += HandleLoadStepStarted;
 
-            await entryPoint.PreloadEntryPoint();
+                await preloadEntryPoint.PreloadEntryPoint();
+                preloadEntryPoint.OnLoadStepStarted -= HandleLoadStepStarted;
+            }
+
             entryPoint.BuildEntryPoint();
 
             _progress += _stepProgress;
             _loadingScreenService.SetStatus("Completed", _progress);
 
             _loadingScreenService.Close<DefaultLoadingScreen>();
-            entryPoint.OnLoadStepStarted -= HandleLoadStepStarted;
         }
 
         private void HandleLoadStepStarted(string loadingStepName)
