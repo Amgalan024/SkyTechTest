@@ -46,6 +46,7 @@ namespace Core.Gameplay.EntryPoint
             builder.RegisterInstance(_fieldCellPrefab);
 
             builder.Register<FieldConstructor>(Lifetime.Singleton);
+            builder.Register<GameTimer>(Lifetime.Singleton);
 
             builder.RegisterEntryPoint<GameplayController>();
         }

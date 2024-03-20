@@ -9,20 +9,24 @@ using SceneSwitchLogic.Switchers;
 using Services.SectionSwitchService;
 using UnityEngine;
 using UnityEngine.Assertions;
+using Utils.DialogView;
+using Utils.DialogView.SetupData;
+using Utils.DialogView.Views;
 using VContainer.Unity;
 
 namespace Core.Gameplay.Controllers
 {
-    public class GameplayController : IInitializable
+    public class GameplayController : IInitializable, IDisposable
     {
         private readonly SectionSwitchParams _sectionSwitchParams;
         private readonly SectionSwitchService _sectionSwitchService;
 
         private readonly FieldConstructor _fieldConstructor;
-
+        private readonly DialogViewService _dialogViewService;
         private readonly GameplayView _view;
-        private GameplaySettings _gameplaySettings;
+        private readonly GameTimer _gameTimer;
 
+        private GameplaySettings _gameplaySettings;
         private LinkedList<IInputStrategy> _inputStrategies;
         private LinkedListNode<IInputStrategy> _currentTurnInputStrategy;
 
@@ -34,13 +38,20 @@ namespace Core.Gameplay.Controllers
             new Vector2(-1, 1),
         };
 
+        private ConfirmationDialogView _exitConfirmationDialog;
+
+        private readonly List<Action> _disposeActions = new();
+
         public GameplayController(SectionSwitchParams sectionSwitchParams, GameplayView view,
-            SectionSwitchService sectionSwitchService, FieldConstructor fieldConstructor)
+            SectionSwitchService sectionSwitchService, FieldConstructor fieldConstructor,
+            DialogViewService dialogViewService, GameTimer gameTimer)
         {
             _sectionSwitchParams = sectionSwitchParams;
             _view = view;
             _sectionSwitchService = sectionSwitchService;
             _fieldConstructor = fieldConstructor;
+            _dialogViewService = dialogViewService;
+            _gameTimer = gameTimer;
         }
 
         void IInitializable.Initialize()
@@ -51,10 +62,64 @@ namespace Core.Gameplay.Controllers
 
             Assert.IsNotNull(_gameplaySettings);
 
+            _view.OnPauseClicked += OnPauseClicked;
             _view.SetPlayerName(_gameplaySettings.PlayerName);
             _view.SetOpponentName(_gameplaySettings.OpponentName);
             _view.SetRoundsCounterStatus(0, _gameplaySettings.TotalRounds);
             StartGameplay();
+        }
+
+        void IDisposable.Dispose()
+        {
+            _gameTimer.Stop();
+
+            _view.OnPauseClicked -= OnPauseClicked;
+            _currentTurnInputStrategy.Value.OnInput -= SetTextTurn;
+            _gameTimer.OnTick -= _view.SetTime;
+            _view.PauseView.OnResumeClicked -= ResumeGame;
+            _view.PauseView.OnMainMenuClicked -= ExitToMainMenu;
+
+            foreach (var disposeAction in _disposeActions)
+            {
+                disposeAction.Invoke();
+            }
+        }
+
+        private void OnPauseClicked()
+        {
+            _gameTimer.Pause();
+            _view.PauseView.Show();
+            _view.PauseView.OnResumeClicked += ResumeGame;
+            _view.PauseView.OnMainMenuClicked += ExitToMainMenu;
+        }
+
+        private void ResumeGame()
+        {
+            _gameTimer.Resume();
+            _view.PauseView.Hide();
+        }
+
+        private async void ExitToMainMenu()
+        {
+            var confirmationSetupData = new ConfirmationSetupData()
+            {
+                HeaderText = "Exit", DescriptionText = "You sure you want to exit?"
+            };
+
+            _exitConfirmationDialog = await _dialogViewService.ShowAsync<ConfirmationDialogView>(confirmationSetupData);
+
+            _exitConfirmationDialog.OnConfirmClicked += OnMainMenuExitConfirmed;
+            _disposeActions.Add(() => { _exitConfirmationDialog.OnConfirmClicked -= OnMainMenuExitConfirmed; });
+        }
+
+        private void OnMainMenuExitConfirmed(bool confirmed)
+        {
+            _exitConfirmationDialog.HideAsync();
+
+            if (confirmed)
+            {
+                _sectionSwitchService.Switch("MainMenu");
+            }
         }
 
         private void StartGameplay()
@@ -74,6 +139,8 @@ namespace Core.Gameplay.Controllers
 
             _currentTurnInputStrategy.Value.OnInput += SetTextTurn;
             _currentTurnInputStrategy.Value.HandleInput();
+            _gameTimer.Start();
+            _gameTimer.OnTick += _view.SetTime;
         }
 
         private async void SetTextTurn(FieldCellModel fieldCellModel)
@@ -108,7 +175,8 @@ namespace Core.Gameplay.Controllers
         private void ClaimFieldCellView(FieldCellModel fieldCellModel)
         {
             var fieldCellView = _fieldConstructor.FieldCellViewsByModel[fieldCellModel];
-            fieldCellView.SetClaimed(fieldCellModel.ClaimedById); //todo:в будущем во вьюшку пойдет не id а какой нить спрайт доделать
+            fieldCellView.SetClaimed(fieldCellModel
+                .ClaimedById); //todo:в будущем во вьюшку пойдет не id а какой нить спрайт доделать
         }
 
         private bool CheckLineWinLenght(FieldCellModel fieldCellModel)

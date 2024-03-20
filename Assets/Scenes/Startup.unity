@@ -1382,6 +1382,7 @@ MonoBehaviour:
   - {fileID: 4120234693759032067, guid: 1d8914521d574db45ac562554f299dec, type: 3}
   - {fileID: 5011183919703524802, guid: 09895ea9bb982f243b0876de64120324, type: 3}
   - {fileID: 7173109424691568540, guid: 0d30a4434b320ac4996b8a23b76d8356, type: 3}
+  - {fileID: 218132839212361025, guid: d2f810b27328b894a8b6fb38dc389a3c, type: 3}
   _instantiateParent: {fileID: 1853569593}
 --- !u!1 &2011186582
 GameObject:
@@ -1526,6 +1527,6 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
-  m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingLayerID: 92425939
+  m_SortingOrder: 100
   m_TargetDisplay: 0
