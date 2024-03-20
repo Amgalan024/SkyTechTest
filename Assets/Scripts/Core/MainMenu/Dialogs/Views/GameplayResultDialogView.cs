@@ -1,9 +1,9 @@
 ﻿using Core.Gameplay.Models;
 using Cysharp.Threading.Tasks;
+using Services.DialogView.Views;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
-using Services.DialogView.Views;
 
 namespace Core.MainMenu.Views.DialogView
 {

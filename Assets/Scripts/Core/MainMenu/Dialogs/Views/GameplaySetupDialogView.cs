@@ -1,10 +1,10 @@
 ﻿using System;
 using Core.MainMenu.Models;
 using Cysharp.Threading.Tasks;
+using Services.DialogView.Views;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
-using Services.DialogView.Views;
 
 namespace Core.MainMenu.Views.DialogView
 {

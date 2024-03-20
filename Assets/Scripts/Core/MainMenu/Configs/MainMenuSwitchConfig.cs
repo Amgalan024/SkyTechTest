@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using Services.LoadingScreen.SetupData;
+﻿using Services.LoadingScreen.SetupData;
+using UnityEngine;
 
 namespace Core.MainMenu.Config
 {

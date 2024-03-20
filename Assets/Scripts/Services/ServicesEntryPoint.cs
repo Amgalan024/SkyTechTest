@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 using Services;
+using UnityEngine;
 using VContainer;
 
 public class ServicesEntryPoint : MonoBehaviour
