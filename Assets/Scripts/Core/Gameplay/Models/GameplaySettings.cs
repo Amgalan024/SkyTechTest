@@ -1,18 +1,22 @@
-﻿namespace Core.Gameplay.Models
+﻿using Core.Gameplay.InputStrategies;
+
+namespace Core.Gameplay.Models
 {
     public class GameplaySettings
     {
-        public string PlayerName { get; }
-        public string OpponentName { get; }
+        public PlayerInputStrategyModel PlayerInputStrategyModel { get; }
+        public BotStrategyInputModel BotStrategyInputModel { get; }
         public int TotalRounds { get; }
         public int FieldSize { get; }
-        public int LineWinLenght { get; }//todo:ограничить по значению не больше размера поля
+        public int LineWinLenght { get; } //todo:ограничить по значению не больше размера поля
         public int ScoreReward { get; }
 
-        public GameplaySettings(string playerName, string opponentName, int totalRounds, int fieldSize, int lineWinLenght, int scoreReward)
+        public GameplaySettings(PlayerInputStrategyModel playerInputStrategyModel,
+            BotStrategyInputModel botStrategyInputModel, int totalRounds, int fieldSize,
+            int lineWinLenght, int scoreReward)
         {
-            PlayerName = playerName;
-            OpponentName = opponentName;
+            PlayerInputStrategyModel = playerInputStrategyModel;
+            BotStrategyInputModel = botStrategyInputModel;
             TotalRounds = totalRounds;
             FieldSize = fieldSize;
             LineWinLenght = lineWinLenght;

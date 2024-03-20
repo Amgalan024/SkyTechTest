@@ -1,4 +1,5 @@
-﻿using Core.Gameplay.Models;
+﻿using System;
+using Core.Gameplay.Models;
 using Cysharp.Threading.Tasks;
 using Services.DialogView.Views;
 using TMPro;
@@ -17,7 +18,9 @@ namespace Core.MainMenu.Views.DialogView
 
             Assert.IsNotNull(resultData);
 
-            _winnerText.text = resultData.WinnerName;
+            var timeString = new DateTime().AddSeconds(resultData.GameDuration).ToString("mm:ss");
+
+            _winnerText.text = $"Winner: {resultData.WinnerName}\n Time: {timeString}";
         }
 
         public override UniTask ShowAsync()

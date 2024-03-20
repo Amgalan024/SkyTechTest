@@ -9,14 +9,14 @@ namespace Core.Gameplay.InputStrategies
 {
     public class BotInputStrategy : IInputStrategy
     {
+        public string Id => _model.Id;
         public event Action<FieldCellModel> OnInput;
-
-        private readonly string _id;
+        private readonly BotStrategyInputModel _model;
         private readonly List<FieldCellModel> _fieldCellModels;
 
-        public BotInputStrategy(string id, List<FieldCellModel> fieldCellModels)
+        public BotInputStrategy(BotStrategyInputModel model, List<FieldCellModel> fieldCellModels)
         {
-            _id = id;
+            _model = model;
             _fieldCellModels = fieldCellModels;
         }
 
@@ -24,13 +24,12 @@ namespace Core.Gameplay.InputStrategies
         {
             //todo: сделать два отдельный списка для занятых ине занятых клеток, засунуть их в провайдер/контейнер какой то
             await UniTask.Delay(TimeSpan.FromSeconds(Random.Range(1, 3))); //рандомная задержка перед решением бота
-            var freeFieldCells = _fieldCellModels.Where(c => c.ClaimedById == null).ToList();
+            var freeFieldCells = _fieldCellModels.Where(c => c.IsClaimed == false).ToList();
 
             var randomIndex = Random.Range(0, freeFieldCells.Count);
 
             var randomFieldCell = freeFieldCells[randomIndex];
 
-            randomFieldCell.ClaimCell(_id);
             OnInput?.Invoke(randomFieldCell);
         }
     }

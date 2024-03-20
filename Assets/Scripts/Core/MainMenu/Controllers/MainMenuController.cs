@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core.Gameplay.InputStrategies;
 using Core.Gameplay.Models;
 using Core.MainMenu.Config;
 using Core.MainMenu.Models;
@@ -95,9 +96,12 @@ namespace Core.MainMenu.Controllers
 
         private void StartGameplay()
         {
-            var gameSettings = new GameplaySettings("Player", "Bot", _gameplaySetupDialog.RoundsSliderValue,
-                _gameplaySetupDialog.FieldSizeSliderValue, _gameplaySetupDialog.LineWinLenghtSliderValue,
-                _config.GameplaySetupSettingsData.ScoreRewards);
+            var playerInputStrategyModel = new PlayerInputStrategyModel("Player", "1");
+            var botStrategyInputModel = new BotStrategyInputModel("Bot", 1, "2");
+
+            var gameSettings = new GameplaySettings(playerInputStrategyModel, botStrategyInputModel,
+                _gameplaySetupDialog.RoundsSliderValue, _gameplaySetupDialog.FieldSizeSliderValue,
+                _gameplaySetupDialog.LineWinLenghtSliderValue, _config.GameplaySetupSettingsData.ScoreRewards);
 
             _sectionSwitchService.Switch("Gameplay", gameSettings);
         }

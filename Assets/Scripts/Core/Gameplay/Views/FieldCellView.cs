@@ -23,6 +23,11 @@ namespace Core.Gameplay.Views
             _idText.text = id;
         }
 
+        public void ClearClaim()
+        {
+            _idText.text = string.Empty;
+        }
+
         public void SetSize(float size)
         {
             _spriteRenderer.size = Vector2.one * size;

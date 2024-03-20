@@ -7,17 +7,19 @@ namespace Core.Gameplay.InputStrategies
 {
     public class PlayerInputStrategy : IInputStrategy
     {
+        public string Id => _model.Id;
         public event Action<FieldCellModel> OnInput;
 
+        private readonly PlayerInputStrategyModel _model;
         private readonly Dictionary<FieldCellView, FieldCellModel> _fieldCellModelsByView;
 
-        private readonly string _id;
         private bool _canInput;
 
-        public PlayerInputStrategy(string id, Dictionary<FieldCellView, FieldCellModel> fieldCellModelsByView)
+        public PlayerInputStrategy(PlayerInputStrategyModel model,
+            Dictionary<FieldCellView, FieldCellModel> fieldCellModelsByView)
         {
+            _model = model;
             _fieldCellModelsByView = fieldCellModelsByView;
-            _id = id;
         }
 
         void IInputStrategy.HandleInput()
@@ -39,7 +41,6 @@ namespace Core.Gameplay.InputStrategies
 
             if (_canInput)
             {
-                fieldCellModel.ClaimCell(_id);
                 OnInput?.Invoke(fieldCellModel);
             }
 

@@ -8,7 +8,7 @@ namespace Core.Gameplay
     {
         public event Action<int> OnTick;
 
-        private int _currentTime;
+        public int CurrentTime { get; private set; }
 
         private bool _paused;
         private bool _stopped;
@@ -37,7 +37,7 @@ namespace Core.Gameplay
 
         private async UniTask StartTimerAsync()
         {
-            _currentTime = 0;
+            CurrentTime = 0;
 
             while (_stopped == false)
             {
@@ -47,8 +47,8 @@ namespace Core.Gameplay
                     break;
                 }
 
-                _currentTime++;
-                OnTick?.Invoke(_currentTime);
+                CurrentTime++;
+                OnTick?.Invoke(CurrentTime);
             }
         }
 

@@ -28,11 +28,13 @@ namespace Core.MainMenu.Views.DialogView
             Assert.IsNotNull(gameplaySetupData);
 
             _roundsCountSlider.Setup(gameplaySetupData.TotalRoundsSetupName, gameplaySetupData.MinRounds,
-                gameplaySetupData.MaxRounds);
+                gameplaySetupData.MaxRounds, gameplaySetupData.MinRounds);
             _fieldSizeSlider.Setup(gameplaySetupData.FieldSizeSetupName, gameplaySetupData.MinFieldSize,
-                gameplaySetupData.MaxFieldSize);
+                gameplaySetupData.MaxFieldSize, gameplaySetupData.MinFieldSize);
             _lineWinLenghtSlider.Setup(gameplaySetupData.LineWinLeghtSetupName, gameplaySetupData.MinFieldSize,
-                gameplaySetupData.MaxFieldSize);
+                gameplaySetupData.MinFieldSize, gameplaySetupData.MinFieldSize);
+
+            _fieldSizeSlider.OnValueChanged += OnFieldSizeSliderValueChanged;
         }
 
         public override async UniTask ShowAsync()
@@ -49,6 +51,13 @@ namespace Core.MainMenu.Views.DialogView
         {
             _confirmButton.onClick.RemoveAllListeners();
             gameObject.SetActive(false);
+        }
+
+        private void OnFieldSizeSliderValueChanged(int value)
+        {
+            var currentValue = _lineWinLenghtSlider.Value <= value ? _lineWinLenghtSlider.Value : value;
+
+            _lineWinLenghtSlider.SetValues(_fieldSizeSlider.MinValue, value, currentValue);
         }
     }
 }

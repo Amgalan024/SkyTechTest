@@ -13,6 +13,7 @@ using Services.SectionSwitchService;
 using UnityEngine;
 using UnityEngine.Assertions;
 using VContainer.Unity;
+using Random = UnityEngine.Random;
 
 namespace Core.Gameplay.Controllers
 {
@@ -28,11 +29,13 @@ namespace Core.Gameplay.Controllers
         private readonly GameplayView _view;
 
         private GameplaySettings _gameplaySettings;
-        private LinkedList<IInputStrategy> _inputStrategies;
+
+        private readonly LinkedList<IInputStrategy> _inputStrategies = new();
+        private readonly Dictionary<IInputStrategy, int> _roundsByInputStrategies = new();
         private LinkedListNode<IInputStrategy> _currentTurnInputStrategy;
         private IInputStrategy _playerInputStrategy;
 
-        private readonly List<Vector2> _lineWinDirections = new() //todo: Вынести в конфиг
+        private readonly List<Vector2> _lineWinDirections = new()
         {
             new Vector2(0, 1),
             new Vector2(1, 0),
@@ -66,14 +69,15 @@ namespace Core.Gameplay.Controllers
             Assert.IsNotNull(_gameplaySettings);
 
             _view.OnPauseClicked += OnPauseClicked;
-            _view.SetPlayerName(_gameplaySettings.PlayerName);
-            _view.SetOpponentName(_gameplaySettings.OpponentName);
+            _view.SetPlayerName(_gameplaySettings.PlayerInputStrategyModel.Name);
+            _view.SetOpponentName(_gameplaySettings.BotStrategyInputModel.Name);
             _view.SetRoundsCounterStatus(0, _gameplaySettings.TotalRounds);
 
             _view.PauseView.OnResumeClicked += OnResumeClicked;
             _view.PauseView.OnMainMenuClicked += OnMainMenuClicked;
 
-            StartGameplay();
+            CreateGame();
+            StartRound();
         }
 
         void IDisposable.Dispose()
@@ -128,57 +132,75 @@ namespace Core.Gameplay.Controllers
             }
         }
 
-        private void StartGameplay()
+        private void CreateGame()
         {
             _fieldConstructor.CreateField(_gameplaySettings.FieldSize);
 
-            //todo:сделать зависимость стратегий от настроек которые пришли с меню
-            var botStrategy = new BotInputStrategy("1", _fieldConstructor.FieldCellModels);
-            var playerStrategy = new PlayerInputStrategy("2", _fieldConstructor.FieldCellModelsByView);
-            playerStrategy.Initialize();
+            var botInputStrategy = new BotInputStrategy(_gameplaySettings.BotStrategyInputModel,
+                _fieldConstructor.FieldCellModels);
 
-            _playerInputStrategy = playerStrategy;
+            var playerInputStrategy = new PlayerInputStrategy(_gameplaySettings.PlayerInputStrategyModel,
+                _fieldConstructor.FieldCellModelsByView);
+            playerInputStrategy.Initialize();
+            _playerInputStrategy = playerInputStrategy;
 
-            _inputStrategies = new LinkedList<IInputStrategy>();
-            _inputStrategies.AddFirst(botStrategy);
-            _inputStrategies.AddFirst(playerStrategy);
+            _inputStrategies.AddLast(botInputStrategy);
+            _inputStrategies.AddLast(playerInputStrategy);
 
-            _currentTurnInputStrategy = _inputStrategies.First; //todo: сделать рандом выбора первоого хода
+            foreach (var inputStrategy in _inputStrategies)
+            {
+                _roundsByInputStrategies.Add(inputStrategy, 0);
+            }
+        }
+
+        private void StartRound()
+        {
+            foreach (var fieldCellModel in _fieldConstructor.FieldCellModels)
+            {
+                fieldCellModel.ClearClaim();
+            }
+
+            foreach (var fieldCellView in _fieldConstructor.FieldCellViews)
+            {
+                fieldCellView.ClearClaim();
+            }
+
+            var randomTurn = Random.Range(0, 2);
+
+            if (randomTurn > 0)
+            {
+                _currentTurnInputStrategy = _inputStrategies.First;
+            }
+            else
+            {
+                _currentTurnInputStrategy = _inputStrategies.Last;
+            }
 
             _currentTurnInputStrategy.Value.OnInput += SetTextTurn;
             _currentTurnInputStrategy.Value.HandleInput();
+
             _gameTimer.Start();
             _gameTimer.OnTick += _view.SetTime;
         }
 
-        private async void SetTextTurn(FieldCellModel fieldCellModel)
+        private void SetTextTurn(FieldCellModel fieldCellModel)
         {
-            ClaimFieldCellView(fieldCellModel);
+            ClaimFieldCellBy(fieldCellModel, _currentTurnInputStrategy.Value);
 
             _currentTurnInputStrategy.Value.OnInput -= SetTextTurn;
 
             if (CheckLineWinLenght(fieldCellModel))
             {
-                var oldScore = _saveDataService.GetData<int>("Score");
-                var newScore = oldScore;
-                _view.EndGameScreenView.Show();
+                _roundsByInputStrategies[_currentTurnInputStrategy.Value]++;
 
-                if (_currentTurnInputStrategy.Value == _playerInputStrategy)
+                if (_roundsByInputStrategies[_currentTurnInputStrategy.Value] == _gameplaySettings.TotalRounds)
                 {
-                    newScore += _gameplaySettings.ScoreReward;
-                    _saveDataService.SetData("Score", newScore);
-                    await _view.EndGameScreenView.AddWinScore(oldScore, newScore, _gameplaySettings.ScoreReward);
+                    EndGame(_currentTurnInputStrategy.Value);
                 }
                 else
                 {
-                    newScore -= _gameplaySettings.ScoreReward;
-                    _saveDataService.SetData("Score", newScore);
-                    await _view.EndGameScreenView.AddLoseScore(oldScore, newScore, _gameplaySettings.ScoreReward);
+                    StartRound();
                 }
-
-                var gameResult = new GameplayResult(fieldCellModel.ClaimedById);
-
-                _sectionSwitchService.Switch("MainMenu", gameResult);
 
                 return;
             }
@@ -194,8 +216,34 @@ namespace Core.Gameplay.Controllers
             _currentTurnInputStrategy.Value.HandleInput();
         }
 
-        private void ClaimFieldCellView(FieldCellModel fieldCellModel)
+        private async void EndGame(IInputStrategy winnerStrategy)
         {
+            var oldScore = _saveDataService.GetData<int>("Score");
+            var newScore = oldScore;
+            _view.EndGameScreenView.Show();
+
+            if (winnerStrategy == _playerInputStrategy)
+            {
+                newScore += _gameplaySettings.ScoreReward;
+                _saveDataService.SetData("Score", newScore);
+                await _view.EndGameScreenView.AddWinScore(oldScore, newScore, _gameplaySettings.ScoreReward);
+            }
+            else
+            {
+                newScore -= _gameplaySettings.ScoreReward;
+                _saveDataService.SetData("Score", newScore);
+                await _view.EndGameScreenView.AddLoseScore(oldScore, newScore, _gameplaySettings.ScoreReward);
+            }
+
+            var gameResult = new GameplayResult(winnerStrategy.Id, _gameTimer.CurrentTime);
+
+            _sectionSwitchService.Switch("MainMenu", gameResult);
+        }
+
+        private void ClaimFieldCellBy(FieldCellModel fieldCellModel, IInputStrategy inputStrategy)
+        {
+            fieldCellModel.ClaimCell(inputStrategy.Id);
+
             var fieldCellView = _fieldConstructor.FieldCellViewsByModel[fieldCellModel];
             fieldCellView.SetClaimed(fieldCellModel.ClaimedById);
         }
