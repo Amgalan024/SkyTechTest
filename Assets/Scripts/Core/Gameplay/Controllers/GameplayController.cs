@@ -4,7 +4,6 @@ using System.Linq;
 using Core.Gameplay.InputStrategies;
 using Core.Gameplay.Models;
 using Core.Gameplay.Views;
-using Cysharp.Threading.Tasks;
 using SceneSwitchLogic.Switchers;
 using Services.SectionSwitchService;
 using UnityEngine;
@@ -12,6 +11,7 @@ using UnityEngine.Assertions;
 using Utils.DialogView;
 using Utils.DialogView.SetupData;
 using Utils.DialogView.Views;
+using Utils.SavedDataProvider;
 using VContainer.Unity;
 
 namespace Core.Gameplay.Controllers
@@ -23,12 +23,14 @@ namespace Core.Gameplay.Controllers
 
         private readonly FieldConstructor _fieldConstructor;
         private readonly DialogViewService _dialogViewService;
-        private readonly GameplayView _view;
+        private readonly ISaveDataService _saveDataService;
         private readonly GameTimer _gameTimer;
+        private readonly GameplayView _view;
 
         private GameplaySettings _gameplaySettings;
         private LinkedList<IInputStrategy> _inputStrategies;
         private LinkedListNode<IInputStrategy> _currentTurnInputStrategy;
+        private IInputStrategy _playerInputStrategy;
 
         private readonly List<Vector2> _lineWinDirections = new() //todo: Вынести в конфиг
         {
@@ -44,7 +46,7 @@ namespace Core.Gameplay.Controllers
 
         public GameplayController(SectionSwitchParams sectionSwitchParams, GameplayView view,
             SectionSwitchService sectionSwitchService, FieldConstructor fieldConstructor,
-            DialogViewService dialogViewService, GameTimer gameTimer)
+            DialogViewService dialogViewService, GameTimer gameTimer, ISaveDataService saveDataService)
         {
             _sectionSwitchParams = sectionSwitchParams;
             _view = view;
@@ -52,6 +54,7 @@ namespace Core.Gameplay.Controllers
             _fieldConstructor = fieldConstructor;
             _dialogViewService = dialogViewService;
             _gameTimer = gameTimer;
+            _saveDataService = saveDataService;
         }
 
         void IInitializable.Initialize()
@@ -131,6 +134,8 @@ namespace Core.Gameplay.Controllers
             var playerStrategy = new PlayerInputStrategy("2", _fieldConstructor.FieldCellModelsByView);
             playerStrategy.Initialize();
 
+            _playerInputStrategy = playerStrategy;
+
             _inputStrategies = new LinkedList<IInputStrategy>();
             _inputStrategies.AddFirst(botStrategy);
             _inputStrategies.AddFirst(playerStrategy);
@@ -151,8 +156,22 @@ namespace Core.Gameplay.Controllers
 
             if (CheckLineWinLenght(fieldCellModel))
             {
-                await UniTask.Delay(TimeSpan
-                    .FromSeconds(1)); //todo: добавить анимацию победы с показом очков и чет там еще по ТЗ
+                var oldScore = _saveDataService.GetData<int>("Score");
+                var newScore = oldScore;
+                _view.EndGameScreenView.Show();
+
+                if (_currentTurnInputStrategy.Value == _playerInputStrategy)
+                {
+                    newScore += _gameplaySettings.ScoreReward;
+                    _saveDataService.SetData("Score", newScore);
+                    await _view.EndGameScreenView.AddWinScore(oldScore, newScore, _gameplaySettings.ScoreReward);
+                }
+                else
+                {
+                    newScore -= _gameplaySettings.ScoreReward;
+                    _saveDataService.SetData("Score", newScore);
+                    await _view.EndGameScreenView.AddLoseScore(oldScore, newScore, _gameplaySettings.ScoreReward);
+                }
 
                 var gameResult = new GameplayResult(fieldCellModel.ClaimedById);
 

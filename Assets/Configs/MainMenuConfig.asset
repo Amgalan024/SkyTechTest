@@ -20,3 +20,4 @@ MonoBehaviour:
     MaxFieldSize: 8
     MinRounds: 3
     MaxRounds: 5
+    ScoreRewards: 100

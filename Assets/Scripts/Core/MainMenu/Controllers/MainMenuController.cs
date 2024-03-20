@@ -11,6 +11,8 @@ using Services.SectionSwitchService;
 using UnityEngine;
 using Utils.BackButtonClickDetector;
 using Utils.DialogView;
+using Utils.DialogView.SetupData;
+using Utils.DialogView.Views;
 using Utils.SavedDataProvider;
 using VContainer.Unity;
 
@@ -20,7 +22,7 @@ namespace Core.MainMenu.Controller
     {
         private readonly SectionSwitchParams _sectionSwitchParams;
 
-        private MainMenuModel _model;
+        private readonly MainMenuModel _model;
         private readonly MainMenuView _view;
         private readonly MainMenuConfig _config;
 
@@ -33,7 +35,8 @@ namespace Core.MainMenu.Controller
         private GameplaySetupDialogView _gameplaySetupDialog;
 
         public MainMenuController(SectionSwitchParams sectionSwitchParams, MainMenuView view, MainMenuModel model,
-            MainMenuConfig config, SectionSwitchService sectionSwitchService, DialogViewService dialogViewService)
+            MainMenuConfig config, SectionSwitchService sectionSwitchService, DialogViewService dialogViewService,
+            ISaveDataService saveDataService)
         {
             _sectionSwitchParams = sectionSwitchParams;
             _view = view;
@@ -41,6 +44,7 @@ namespace Core.MainMenu.Controller
             _config = config;
             _sectionSwitchService = sectionSwitchService;
             _dialogViewService = dialogViewService;
+            _saveDataService = saveDataService;
         }
 
         void IInitializable.Initialize()
@@ -52,6 +56,9 @@ namespace Core.MainMenu.Controller
             {
                 _dialogViewService.ShowAsync<GameplayResultDialogView>(gameResult);
             }
+
+            var score = _saveDataService.GetData<int>("Score");
+            _view.SetScoreText(score);
 
             _view.OnStartClicked += HandleStartClicked;
             _view.OnStoreClicked += HandleStoreClicked;
@@ -89,14 +96,30 @@ namespace Core.MainMenu.Controller
         private void StartGameplay()
         {
             var gameSettings = new GameplaySettings("Player", "Bot", _gameplaySetupDialog.RoundsSliderValue,
-                _gameplaySetupDialog.FieldSizeSliderValue, _gameplaySetupDialog.LineWinLenghtSliderValue);
+                _gameplaySetupDialog.FieldSizeSliderValue, _gameplaySetupDialog.LineWinLenghtSliderValue,
+                _config.GameplaySetupSettingsData.ScoreRewards);
 
             _sectionSwitchService.Switch("Gameplay", gameSettings);
         }
 
-        private void QuitApplication()
+        private async void QuitApplication()
         {
-            Application.Quit();
+            var confirmationSetupData = new ConfirmationSetupData()
+            {
+                HeaderText = "Exit",
+                DescriptionText = "Are you sure you want to exit"
+            };
+
+            var dialog = await _dialogViewService.ShowAsync<ConfirmationDialogView>(confirmationSetupData);
+            dialog.OnConfirmClicked += OnExitConfirmClicked;
+        }
+
+        private void OnExitConfirmClicked(bool confirmed)
+        {
+            if (confirmed)
+            {
+                Application.Quit();
+            }
         }
     }
 }

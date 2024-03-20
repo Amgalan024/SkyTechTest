@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 namespace Utils.SceneLoader
 {
     //todo: продумать абстракции что бы подменять реализации сервисов, мб менять между ресурс и аддрессебл загрузкой
-    public class SceneLoadService : IService
+    public class SceneLoadService
     {
         public async UniTask SwitchSceneAsync(string sceneName)
         {
@@ -15,7 +15,5 @@ namespace Utils.SceneLoader
             var scene = SceneManager.GetSceneByName(sceneName);
             SceneManager.SetActiveScene(scene);
         }
-
-        public bool Ready { get; }
     }
 }

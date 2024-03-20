@@ -10,7 +10,7 @@ namespace Core.Gameplay.Views
         public event Action OnPauseClicked;
 
         [field: SerializeField] public PauseView PauseView { get; private set; }
-
+        [field: SerializeField] public EndGameScreenView EndGameScreenView { get; private set; }
         [SerializeField] private TextMeshProUGUI _playerNameText;
         [SerializeField] private TextMeshProUGUI _opponentNameText;
         [SerializeField] private TextMeshProUGUI _roundsCounterText;

@@ -9,7 +9,7 @@ namespace Utils.LoadingScreen
         [SerializeField] private List<BaseLoadingScreenView> _loadingScreenViews;
         private LoadingScreenService _loadingScreenService;
 
-        public override IService Build()
+        public override object Build()
         {
             var loadingScreenProvider = new LoadingScreenProvider(_loadingScreenViews);
             _loadingScreenService = new LoadingScreenService(loadingScreenProvider);

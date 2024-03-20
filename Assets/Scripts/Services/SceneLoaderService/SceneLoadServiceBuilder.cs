@@ -6,7 +6,7 @@ namespace Utils.SceneLoader
     {
         private SceneLoadService _sceneLoadService;
 
-        public override IService Build()
+        public override object Build()
         {
             _sceneLoadService = new SceneLoadService();
             return _sceneLoadService;
@@ -14,7 +14,7 @@ namespace Utils.SceneLoader
 
         public override void Configure(IContainerBuilder builder)
         {
-            builder.RegisterInstance(_sceneLoadService);
+            builder.RegisterInstance(_sceneLoadService).AsImplementedInterfaces();
         }
     }
 }

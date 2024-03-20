@@ -14,5 +14,6 @@ namespace Core.MainMenu.Models
 
         public int MinRounds;
         public int MaxRounds;
+        public int ScoreRewards;
     }
 }

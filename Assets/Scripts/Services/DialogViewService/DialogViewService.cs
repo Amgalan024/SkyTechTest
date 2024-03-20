@@ -1,21 +1,14 @@
-﻿using System;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine.Assertions;
 using Utils.DialogView.Views;
 
 namespace Utils.DialogView
 {
-    public class DialogViewService : IService
+    public class DialogViewService
     {
-        public bool Ready { get; }
-        private DialogViewProvider _dialogViewProvider;
+        private readonly DialogViewProvider _dialogViewProvider;
 
         public DialogViewService(DialogViewProvider dialogViewProvider)
-        {
-            _dialogViewProvider = dialogViewProvider;
-        }
-
-        public void SetProvider(DialogViewProvider dialogViewProvider)
         {
             _dialogViewProvider = dialogViewProvider;
         }

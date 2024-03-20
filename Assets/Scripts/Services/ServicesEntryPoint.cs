@@ -11,7 +11,7 @@ public class ServicesEntryPoint : MonoBehaviour
 
     public bool ServicesReady { get; private set; }
 
-    private readonly List<IService> _services = new();
+    private readonly List<object> _services = new();
 
     public void BuildServices()
     {
@@ -49,7 +49,7 @@ public class ServicesEntryPoint : MonoBehaviour
         }
     }
 
-    public T GetService<T>() where T : IService
+    public T GetService<T>()
     {
         var service = _services.FirstOrDefault(s => s.GetType() == typeof(T));
         return (T) service;

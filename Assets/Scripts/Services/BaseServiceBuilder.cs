@@ -5,7 +5,7 @@ namespace Utils
 {
     public abstract class BaseServiceBuilder : MonoBehaviour
     {
-        public abstract IService Build();
+        public abstract object Build();
         public abstract void Configure(IContainerBuilder builder);
     }
 }

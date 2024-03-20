@@ -1,8 +1,6 @@
-﻿using System.Threading.Tasks;
-
-namespace Utils.SavedDataProvider
+﻿namespace Utils.SavedDataProvider
 {
-    public interface ISaveDataService
+    public interface ISaveDataService 
     {
         T GetData<T>(string key);
         void SetData<T>(string key, T value);

@@ -8,7 +8,7 @@ namespace SceneSwitchLogic.EntryPoint
     {
         private SectionSwitchService _sectionSwitchService;
 
-        public override IService Build()
+        public override object Build()
         {
             _sectionSwitchService = new SectionSwitchService();
             return _sectionSwitchService;

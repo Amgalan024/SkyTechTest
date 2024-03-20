@@ -11,7 +11,7 @@ namespace Utils.DialogView
         [SerializeField] private Transform _instantiateParent;
         private DialogViewService _dialogViewService;
 
-        public override IService Build()
+        public override object Build()
         {
             var dialogViewProvider = new DialogViewProvider(_dialogViewPrefabs, _instantiateParent);
             _dialogViewService = new DialogViewService(dialogViewProvider);

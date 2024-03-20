@@ -1,13 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine.Assertions;
-using Utils;
 
 namespace SceneSwitchLogic.Switchers
 {
-    public class SectionSwitchService : IService
+    public class SectionSwitchService
     {
-        public bool Ready { get; }
-
         private readonly Dictionary<string, ISectionSwitcher> _switchers = new();
 
         public void AddSwitcher(ISectionSwitcher sectionSwitcher)
