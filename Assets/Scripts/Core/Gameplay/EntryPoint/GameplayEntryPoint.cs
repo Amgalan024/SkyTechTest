@@ -11,12 +11,18 @@ using VContainer.Unity;
 
 namespace Core.Gameplay.EntryPoint
 {
+    /// <summary>
+    /// В будущем можно будет добавлять различные типы геймплея регистрируя различные Controller'ы для геймплея
+    /// например через поиск соответствующих параметров внутри SectionSwitchParams 
+    /// </summary>
     public class GameplayEntryPoint : BaseEntryPoint, IPreloadEntryPoint
     {
         public event Action<string> OnLoadStepStarted;
+
         [SerializeField] private GameplayView _gameplayView;
         [SerializeField] private FieldView _fieldView;
         [SerializeField] private FieldCellView _fieldCellPrefab;
+
         public int LoadStepsCount => _loadingSteps.Count;
 
         private List<ISectionLoadingStep> _loadingSteps = new()

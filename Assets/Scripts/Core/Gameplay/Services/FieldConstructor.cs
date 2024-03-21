@@ -23,7 +23,7 @@ namespace Core.Gameplay
 
         /// <summary>
         /// Сетка с координатами вида
-        ///   0 1 2 3 4 → X координаты
+        ///   0 1 2 3 4 → X координаты 
         /// 0 x x x x x
         /// 1 x x x x x
         /// 2 x x x x x

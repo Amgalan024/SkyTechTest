@@ -13,6 +13,9 @@ using VContainer.Unity;
 
 namespace Core.MainMenu.EntryPoint
 {
+    /// <summary>
+    /// В дальнейшем главное меню можно дополнять различными подразделами через добавление новых EntryPoint в _subEntryPoints
+    /// </summary>
     public class MainMenuEntryPoint : BaseEntryPoint, IPreloadEntryPoint
     {
         public event Action<string> OnLoadStepStarted;

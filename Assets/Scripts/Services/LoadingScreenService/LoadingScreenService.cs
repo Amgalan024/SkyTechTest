@@ -2,6 +2,11 @@
 
 namespace Services.LoadingScreen
 {
+    /// <summary>
+    /// Данный сервис будет расширяться за счет создания наследников BaseLoadingScreenView с различными данными для настройки,
+    /// пока что есть DefaultLoadingScreen, в дальнейшем можно будет добавить загрузочный экран который будет принимать спрайт или же
+    /// отдельный объект который будет воспроизводить анимацию на загрузочном экране
+    /// </summary>
     public class LoadingScreenService
     {
         private readonly LoadingScreenProvider _loadingScreenProvider;

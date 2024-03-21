@@ -14,6 +14,10 @@ using Random = UnityEngine.Random;
 
 namespace Core.Store.Controllers
 {
+    /// <summary>
+    /// В будущем магазин можно удобно расширять различными видами покупок, создавая для этого новые модели данных наследуемые от BaseProduct
+    /// и создавая для них соответствующие вьюшки которые будут эти модели данных принимать. 
+    /// </summary>
     public class StoreController : IInitializable, IDisposable
     {
         private readonly IProductsProvider _productsProvider;

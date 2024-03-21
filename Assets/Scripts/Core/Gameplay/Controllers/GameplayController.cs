@@ -17,6 +17,12 @@ using Random = UnityEngine.Random;
 
 namespace Core.Gameplay.Controllers
 {
+    /// <summary>
+    /// Данный контроллер отвечает за геймплей с игровым полем статичного размера,
+    /// в будущем можно будет создать новый контроллер который будет для игры с расширением игрового поля каждый раунд.
+    /// Все эти контроллеры будут регистрироватсья взаимозаменяемо в зависимости от параметров которые пришли с главного меню.
+    /// Или же можно будет иметь 1 контроллер и иметь в нем взаимозаменяемые стратегии как пойдет как удобнее будет.
+    /// </summary>
     public class GameplayController : IInitializable, IDisposable
     {
         private readonly SectionSwitchParams _sectionSwitchParams;
@@ -70,7 +76,7 @@ namespace Core.Gameplay.Controllers
 
             _view.OnPauseClicked += OnPauseClicked;
             _view.SetPlayerName(_gameplaySettings.PlayerInputStrategyModel.Name);
-            _view.SetOpponentName(_gameplaySettings.BotStrategyInputModel.Name);
+            _view.SetOpponentName(_gameplaySettings.OpponentStrategyInputModel.Name);
             _view.SetPlayerRoundsText(0, _gameplaySettings.TotalRounds);
             _view.SetOpponentRoundsText(0, _gameplaySettings.TotalRounds);
 
@@ -143,15 +149,23 @@ namespace Core.Gameplay.Controllers
         {
             _fieldConstructor.CreateField(_gameplaySettings.FieldSize);
 
-            var botInputStrategy = new BotInputStrategy(_gameplaySettings.BotStrategyInputModel,
-                _fieldConstructor.FieldCellModels);
+            IInputStrategy opponentInputStrategy = null;
+
+            switch (_gameplaySettings.OpponentStrategyInputModel)
+            {
+                case BotStrategyInputModel botStrategyInputModel:
+                    opponentInputStrategy =
+                        new BotInputStrategy(botStrategyInputModel, _fieldConstructor.FieldCellModels);
+                    break;
+                //В дальнейшем можно добавить онлайн оппонета создав для него стратегию и отправив нужную модель для стратегии из меню
+            }
 
             var playerInputStrategy = new PlayerInputStrategy(_gameplaySettings.PlayerInputStrategyModel,
                 _fieldConstructor.FieldCellModelsByView);
             playerInputStrategy.Initialize();
             _playerInputStrategy = playerInputStrategy;
 
-            _inputStrategies.AddLast(botInputStrategy);
+            _inputStrategies.AddLast(opponentInputStrategy);
             _inputStrategies.AddLast(playerInputStrategy);
 
             foreach (var inputStrategy in _inputStrategies)
@@ -185,9 +199,10 @@ namespace Core.Gameplay.Controllers
 
             _currentTurnInputStrategy.Value.OnInput += SetTextTurn;
             _currentTurnInputStrategy.Value.HandleInput();
+            _view.SetTurnName(_currentTurnInputStrategy.Value.Model.Name);
         }
 
-        private void SetTextTurn(FieldCellModel fieldCellModel)
+        private async void SetTextTurn(FieldCellModel fieldCellModel)
         {
             ClaimFieldCellBy(fieldCellModel, _currentTurnInputStrategy.Value);
 
@@ -208,6 +223,10 @@ namespace Core.Gameplay.Controllers
                     _view.SetOpponentRoundsText(winRoundsCount, _gameplaySettings.TotalRounds);
                 }
 
+                var notificationData =
+                    new NotificationSetupData("Winner: " + _currentTurnInputStrategy.Value.Model.Name, 1f);
+                await _dialogViewService.ShowAsync<NotificationDialogView>(notificationData);
+
                 if (_roundsByInputStrategies[_currentTurnInputStrategy.Value] == _gameplaySettings.TotalRounds)
                 {
                     EndGame(_currentTurnInputStrategy.Value);
@@ -222,7 +241,9 @@ namespace Core.Gameplay.Controllers
 
             if (CheckAnyUnclaimedFieldCells() == false)
             {
-                //todo: диалог ничья
+                var notificationData = new NotificationSetupData("Draw", 1f);
+                await _dialogViewService.ShowAsync<NotificationDialogView>(notificationData);
+
                 StartRound();
 
                 return;
@@ -237,6 +258,7 @@ namespace Core.Gameplay.Controllers
 
             _currentTurnInputStrategy.Value.OnInput += SetTextTurn;
             _currentTurnInputStrategy.Value.HandleInput();
+            _view.SetTurnName(_currentTurnInputStrategy.Value.Model.Name);
         }
 
         private async void EndGame(IInputStrategy winnerStrategy)
@@ -258,14 +280,14 @@ namespace Core.Gameplay.Controllers
                 await _view.EndGameScreenView.AddLoseScore(oldScore, newScore, _gameplaySettings.ScoreReward);
             }
 
-            var gameResult = new GameplayResult(winnerStrategy.Id, _gameTimer.CurrentTime);
+            var gameResult = new GameplayResult(winnerStrategy.Model.Id, _gameTimer.CurrentTime);
 
             _sectionSwitchService.Switch("MainMenu", gameResult);
         }
 
         private void ClaimFieldCellBy(FieldCellModel fieldCellModel, IInputStrategy inputStrategy)
         {
-            fieldCellModel.ClaimCell(inputStrategy.Id);
+            fieldCellModel.ClaimCell(inputStrategy.Model.Id);
 
             var fieldCellView = _fieldConstructor.FieldCellViewsByModel[fieldCellModel];
             fieldCellView.SetClaimed(fieldCellModel.ClaimedById);

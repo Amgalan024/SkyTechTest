@@ -6,6 +6,10 @@ using VContainer.Unity;
 
 namespace Core.Startup
 {
+    /// <summary>
+    /// Контроллер будет развиваться добавлением новых разделов приложения через добавление SectionSwitcher'ов.
+    /// Например можно будет сделать магазин отдельным разделом, а не частью главного меню сделав для него свой свитчер 
+    /// </summary>
     public class StartupController : IInitializable
     {
         private readonly StartupConfig _config;
@@ -22,7 +26,7 @@ namespace Core.Startup
             _sceneLoadService = sceneLoadService;
         }
 
-        public void Initialize()
+        void IInitializable.Initialize()
         {
             var mainMenuSwitchConfig = _config.MainMenuSwitchConfig;
             var gameplaySwitchConfig = _config.GameplaySwitchConfig;

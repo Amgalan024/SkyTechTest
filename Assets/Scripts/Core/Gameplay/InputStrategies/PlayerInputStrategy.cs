@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using Core.Gameplay.Models;
 using Core.Gameplay.Views;
-using UnityEngine;
 
 namespace Core.Gameplay.InputStrategies
 {
     public class PlayerInputStrategy : IInputStrategy
     {
-        public string Id => _model.Id;
+        public IInputStrategyModel Model { get; }
         public event Action<FieldCellModel> OnInput;
 
         private readonly PlayerInputStrategyModel _model;
@@ -19,6 +18,7 @@ namespace Core.Gameplay.InputStrategies
         public PlayerInputStrategy(PlayerInputStrategyModel model,
             Dictionary<FieldCellView, FieldCellModel> fieldCellModelsByView)
         {
+            Model = model;
             _model = model;
             _fieldCellModelsByView = fieldCellModelsByView;
         }

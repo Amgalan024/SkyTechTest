@@ -5,6 +5,9 @@ using Services;
 using UnityEngine;
 using VContainer;
 
+/// <summary>
+/// Точка входа для сервисов может расширяться любыми новыми сервисами которые будут прокинуты через сервис билдер в массив _baseServiceBuilders
+/// </summary>
 public class ServicesEntryPoint : MonoBehaviour
 {
     [SerializeField] private BaseServiceBuilder[] _baseServiceBuilders;

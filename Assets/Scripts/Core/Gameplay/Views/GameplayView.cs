@@ -16,6 +16,7 @@ namespace Core.Gameplay.Views
         [SerializeField] private TextMeshProUGUI _playerRoundsText;
         [SerializeField] private TextMeshProUGUI _opponentRoundsText;
         [SerializeField] private TextMeshProUGUI _timerText;
+        [SerializeField] private TextMeshProUGUI _turnText;
         [SerializeField] private Button _pauseButton;
 
         private void OnEnable()
@@ -46,6 +47,11 @@ namespace Core.Gameplay.Views
         public void SetOpponentRoundsText(int currentRound, int totalRounds)
         {
             _opponentRoundsText.text = $"{currentRound}/{totalRounds}";
+        }
+
+        public void SetTurnName(string turnName)
+        {
+            _turnText.text = turnName;
         }
 
         public void SetTime(DateTime time)

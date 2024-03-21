@@ -4,6 +4,10 @@ using UnityEngine.Assertions;
 
 namespace Services.DialogView
 {
+    /// <summary>
+    /// Данный сервис будет расширяться за счет воздания новых наследников BaseDialogView с различными параметрами для настройки,
+    /// сейчас есть диалоговые окна с потверждением, настройкой геймплея, отображением результата игры
+    /// </summary>
     public class DialogViewService
     {
         private readonly DialogViewProvider _dialogViewProvider;
