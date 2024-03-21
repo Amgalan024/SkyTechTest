@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Core.Gameplay.Models;
 using Core.Gameplay.Views;
+using UnityEngine;
 
 namespace Core.Gameplay.InputStrategies
 {
@@ -41,10 +42,9 @@ namespace Core.Gameplay.InputStrategies
 
             if (_canInput)
             {
+                _canInput = false;
                 OnInput?.Invoke(fieldCellModel);
             }
-
-            _canInput = false;
         }
     }
 }

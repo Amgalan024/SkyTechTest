@@ -18,18 +18,18 @@ namespace Core.MainMenu.Views.DialogView
 
             Assert.IsNotNull(resultData);
 
-            var timeString = new DateTime().AddSeconds(resultData.GameDuration).ToString("mm:ss");
+            var timeString = resultData.GameDuration.ToString("mm:ss");
 
             _winnerText.text = $"Winner: {resultData.WinnerName}\n Time: {timeString}";
         }
 
-        public override UniTask ShowAsync()
+        protected override UniTask DoOnShowAsync()
         {
             gameObject.SetActive(true);
             return UniTask.CompletedTask;
         }
 
-        public override UniTask HideAsync()
+        protected override UniTask DoOnHideAsync()
         {
             gameObject.SetActive(false);
             return UniTask.CompletedTask;

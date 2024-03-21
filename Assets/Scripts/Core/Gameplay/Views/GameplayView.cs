@@ -13,7 +13,8 @@ namespace Core.Gameplay.Views
         [field: SerializeField] public EndGameScreenView EndGameScreenView { get; private set; }
         [SerializeField] private TextMeshProUGUI _playerNameText;
         [SerializeField] private TextMeshProUGUI _opponentNameText;
-        [SerializeField] private TextMeshProUGUI _roundsCounterText;
+        [SerializeField] private TextMeshProUGUI _playerRoundsText;
+        [SerializeField] private TextMeshProUGUI _opponentRoundsText;
         [SerializeField] private TextMeshProUGUI _timerText;
         [SerializeField] private Button _pauseButton;
 
@@ -37,16 +38,19 @@ namespace Core.Gameplay.Views
             _opponentNameText.text = gameName;
         }
 
-        public void SetRoundsCounterStatus(int currentRound, int totalRounds)
+        public void SetPlayerRoundsText(int currentRound, int totalRounds)
         {
-            _roundsCounterText.text = $"{currentRound}/{totalRounds}";
+            _playerRoundsText.text = $"{currentRound}/{totalRounds}";
         }
 
-        public void SetTime(int seconds)
+        public void SetOpponentRoundsText(int currentRound, int totalRounds)
         {
-            var dateTime = new DateTime().AddSeconds(seconds);//todo: Оптимизировать, передавать DateTime в меетод, хранить его в таймере мб или в контроллере
+            _opponentRoundsText.text = $"{currentRound}/{totalRounds}";
+        }
 
-            _timerText.text = dateTime.ToString("mm:ss ");
+        public void SetTime(DateTime time)
+        {
+            _timerText.text = time.ToString("mm:ss ");
         }
     }
 }

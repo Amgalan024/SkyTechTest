@@ -71,13 +71,17 @@ namespace Core.Gameplay.Controllers
             _view.OnPauseClicked += OnPauseClicked;
             _view.SetPlayerName(_gameplaySettings.PlayerInputStrategyModel.Name);
             _view.SetOpponentName(_gameplaySettings.BotStrategyInputModel.Name);
-            _view.SetRoundsCounterStatus(0, _gameplaySettings.TotalRounds);
+            _view.SetPlayerRoundsText(0, _gameplaySettings.TotalRounds);
+            _view.SetOpponentRoundsText(0, _gameplaySettings.TotalRounds);
 
             _view.PauseView.OnResumeClicked += OnResumeClicked;
             _view.PauseView.OnMainMenuClicked += OnMainMenuClicked;
 
             CreateGame();
             StartRound();
+
+            _gameTimer.Start();
+            _gameTimer.OnTick += _view.SetTime;
         }
 
         void IDisposable.Dispose()
@@ -115,11 +119,14 @@ namespace Core.Gameplay.Controllers
                 HeaderText = "Exit", DescriptionText = "You sure you want to exit?"
             };
 
-            //todo: сделать два метода в диалог сервисе, показ сингтон окна и показ мультипл инстанс окна
-            _exitConfirmationDialog = await _dialogViewService.ShowAsync<ConfirmationDialogView>(confirmationSetupData);
+            var dialog = await _dialogViewService.ShowAsync<ConfirmationDialogView>(confirmationSetupData);
 
-            _exitConfirmationDialog.OnConfirmClicked += OnMainMenuExitConfirmed;
-            _disposeActions.Add(() => { _exitConfirmationDialog.OnConfirmClicked -= OnMainMenuExitConfirmed; });
+            if (_exitConfirmationDialog == null || _exitConfirmationDialog != dialog)
+            {
+                _exitConfirmationDialog = dialog;
+                _exitConfirmationDialog.OnConfirmClicked += OnMainMenuExitConfirmed;
+                _disposeActions.Add(() => { _exitConfirmationDialog.OnConfirmClicked -= OnMainMenuExitConfirmed; });
+            }
         }
 
         private void OnMainMenuExitConfirmed(bool confirmed)
@@ -178,9 +185,6 @@ namespace Core.Gameplay.Controllers
 
             _currentTurnInputStrategy.Value.OnInput += SetTextTurn;
             _currentTurnInputStrategy.Value.HandleInput();
-
-            _gameTimer.Start();
-            _gameTimer.OnTick += _view.SetTime;
         }
 
         private void SetTextTurn(FieldCellModel fieldCellModel)
@@ -193,6 +197,17 @@ namespace Core.Gameplay.Controllers
             {
                 _roundsByInputStrategies[_currentTurnInputStrategy.Value]++;
 
+                var winRoundsCount = _roundsByInputStrategies[_currentTurnInputStrategy.Value];
+
+                if (_currentTurnInputStrategy.Value == _playerInputStrategy)
+                {
+                    _view.SetPlayerRoundsText(winRoundsCount, _gameplaySettings.TotalRounds);
+                }
+                else
+                {
+                    _view.SetOpponentRoundsText(winRoundsCount, _gameplaySettings.TotalRounds);
+                }
+
                 if (_roundsByInputStrategies[_currentTurnInputStrategy.Value] == _gameplaySettings.TotalRounds)
                 {
                     EndGame(_currentTurnInputStrategy.Value);
@@ -201,6 +216,14 @@ namespace Core.Gameplay.Controllers
                 {
                     StartRound();
                 }
+
+                return;
+            }
+
+            if (CheckAnyUnclaimedFieldCells() == false)
+            {
+                //todo: диалог ничья
+                StartRound();
 
                 return;
             }
@@ -290,6 +313,11 @@ namespace Core.Gameplay.Controllers
             }
 
             return false;
+        }
+
+        private bool CheckAnyUnclaimedFieldCells()
+        {
+            return _fieldConstructor.FieldCellModels.Any(f => f.IsClaimed == false);
         }
     }
 }

@@ -6,9 +6,9 @@ namespace Core.Gameplay
 {
     public class GameTimer
     {
-        public event Action<int> OnTick;
+        public event Action<DateTime> OnTick;
 
-        public int CurrentTime { get; private set; }
+        public DateTime CurrentTime { get; private set; }
 
         private bool _paused;
         private bool _stopped;
@@ -37,7 +37,7 @@ namespace Core.Gameplay
 
         private async UniTask StartTimerAsync()
         {
-            CurrentTime = 0;
+            CurrentTime = new DateTime();
 
             while (_stopped == false)
             {
@@ -47,7 +47,7 @@ namespace Core.Gameplay
                     break;
                 }
 
-                CurrentTime++;
+                CurrentTime = CurrentTime.AddSeconds(1);
                 OnTick?.Invoke(CurrentTime);
             }
         }

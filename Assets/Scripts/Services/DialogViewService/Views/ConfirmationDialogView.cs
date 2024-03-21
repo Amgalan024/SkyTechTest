@@ -28,7 +28,7 @@ namespace Services.DialogView.Views
             _descriptionText.text = confirmationSetupData.DescriptionText;
         }
 
-        public override async UniTask ShowAsync()
+        protected override async UniTask DoOnShowAsync()
         {
             _yesButton.onClick.AddListener(() => { OnConfirmClicked?.Invoke(true); });
 
@@ -37,7 +37,7 @@ namespace Services.DialogView.Views
             gameObject.SetActive(true);
         }
 
-        public override async UniTask HideAsync()
+        protected override async UniTask DoOnHideAsync()
         {
             _yesButton.onClick.RemoveAllListeners();
             _noButton.onClick.RemoveAllListeners();

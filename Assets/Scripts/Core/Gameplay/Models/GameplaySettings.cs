@@ -8,7 +8,7 @@ namespace Core.Gameplay.Models
         public BotStrategyInputModel BotStrategyInputModel { get; }
         public int TotalRounds { get; }
         public int FieldSize { get; }
-        public int LineWinLenght { get; } //todo:ограничить по значению не больше размера поля
+        public int LineWinLenght { get; }
         public int ScoreReward { get; }
 
         public GameplaySettings(PlayerInputStrategyModel playerInputStrategyModel,

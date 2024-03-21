@@ -37,17 +37,17 @@ namespace Core.MainMenu.Views.DialogView
             _fieldSizeSlider.OnValueChanged += OnFieldSizeSliderValueChanged;
         }
 
-        public override async UniTask ShowAsync()
+        protected override async UniTask DoOnShowAsync()
         {
             _confirmButton.onClick.AddListener(() =>
             {
                 OnConfirmClicked?.Invoke();
-                HideAsync();
+                DoOnHideAsync();
             });
             gameObject.SetActive(true);
         }
 
-        public override async UniTask HideAsync()
+        protected override async UniTask DoOnHideAsync()
         {
             _confirmButton.onClick.RemoveAllListeners();
             gameObject.SetActive(false);

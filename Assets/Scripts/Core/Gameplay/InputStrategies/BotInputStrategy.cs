@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.Gameplay.Models;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Core.Gameplay.InputStrategies

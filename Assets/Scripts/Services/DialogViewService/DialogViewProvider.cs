@@ -9,7 +9,8 @@ namespace Services.DialogView
     public class DialogViewProvider
     {
         private readonly List<BaseDialogView> _dialogViewPrefabs;
-        private Transform _instantiateParent;
+        private readonly Transform _instantiateParent;
+        private readonly List<BaseDialogView> _dialogViewPool = new();
 
         public DialogViewProvider(List<BaseDialogView> dialogViewPrefabs, Transform instantiateParent)
         {
@@ -17,15 +18,22 @@ namespace Services.DialogView
             _instantiateParent = instantiateParent;
         }
 
-        //todo: сделать пул вьюшек
         public TDialogView GetDialogView<TDialogView>() where TDialogView : BaseDialogView
         {
             var prefab = _dialogViewPrefabs.FirstOrDefault(d => d.GetType() == typeof(TDialogView));
             Assert.IsNotNull(prefab);
 
-            var dialogView = Object.Instantiate(prefab, _instantiateParent) as TDialogView;
-
-            return dialogView;
+            var pooledDialog = _dialogViewPool.FirstOrDefault(d => d.Available);
+            if (pooledDialog != null)
+            {
+                return pooledDialog as TDialogView;
+            }
+            else
+            {
+                var dialogView = Object.Instantiate(prefab, _instantiateParent) as TDialogView;
+                _dialogViewPool.Add(dialogView);
+                return dialogView;
+            }
         }
     }
 }

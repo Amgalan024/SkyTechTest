@@ -13,8 +13,6 @@ namespace Services.DialogView
             _dialogViewProvider = dialogViewProvider;
         }
 
-        //todo: сделать пулы к каждому типа вьюшек, то есть открываем диалог, если пул пустой или в нем нет доступных для пула(закрытых) диалогов
-        //то создаем и добавляем диалог в список, после закрытия ставится статус что можно пулить, при след запросе берется закрытый диалог из пул-списка
         public async UniTask<TDialogView> ShowAsync<TDialogView>(object setupData) where TDialogView : BaseDialogView
         {
             var dialogView = _dialogViewProvider.GetDialogView<TDialogView>();

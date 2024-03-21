@@ -19,13 +19,13 @@ namespace Core.Store.Dialogs
             _description.text = $"Purchasing {productData.key}...";
         }
 
-        public override UniTask ShowAsync()
+        protected override UniTask DoOnShowAsync()
         {
             gameObject.SetActive(true);
             return UniTask.CompletedTask;
         }
 
-        public override UniTask HideAsync()
+        protected override UniTask DoOnHideAsync()
         {
             gameObject.SetActive(false);
             return UniTask.CompletedTask;

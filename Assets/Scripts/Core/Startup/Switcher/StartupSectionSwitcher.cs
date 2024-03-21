@@ -28,6 +28,7 @@ namespace Core.Startup
         public async UniTask Switch(params object[] switchParams)
         {
             //todo: добавить в сервис лоадинг скрина поле прогресс котоырй можно будет брать и от него отталкиваться при работа с одним экраном в разных частях прилы
+            //todo: или переработать логику стартапа что бы лоудинг скрин обрабатывался в 1 месте
             _loadingScreenService.SetStatus("Loading Menu Scene", _progress);
 
             await _sceneLoadService.SwitchSceneAsync(_scene);

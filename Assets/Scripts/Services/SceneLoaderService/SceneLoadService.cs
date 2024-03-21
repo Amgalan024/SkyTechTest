@@ -3,7 +3,6 @@ using UnityEngine.SceneManagement;
 
 namespace Services.SceneLoader
 {
-    //todo: продумать абстракцию что бы подменять реализации сервисов, мб менять между ресурс и аддрессебл загрузкой
     public class SceneLoadService
     {
         public async UniTask SwitchSceneAsync(string sceneName)

@@ -35,13 +35,22 @@ namespace Core.Gameplay
         /// <param name="size"></param>
         public void CreateField(int size)
         {
+            var cellSize = _fieldView.Size / (float) size;
+            var cellOffset = _fieldView.Size / (float) (size);
+
             var centerPosition = _fieldView.CenterPoint.position;
+            var startPositionOffset = 0f;
+            if (size % 2 == 1)
+            {
+                startPositionOffset = (cellOffset * (int) (size / 2));
+            }
+            else
+            {
+                startPositionOffset = (cellOffset * (int) (size / 2)) - (cellOffset / 2);
+            }
 
-            var cellOffset = _fieldView.Size / (float)(size - 1);
-            var cellSize = cellOffset; //todo: вычислить с учетом расстояния между клетками
-
-            var startPositionX = centerPosition.x - (_fieldView.Size / 2f);
-            var startPositionY = centerPosition.y + (_fieldView.Size / 2f);
+            var startPositionX = centerPosition.x - startPositionOffset;
+            var startPositionY = centerPosition.y + startPositionOffset;
 
             for (int x = 0; x < size; x++)
             {

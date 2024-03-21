@@ -87,11 +87,14 @@ namespace Core.MainMenu.Controllers
 
         private async void HandleStartClicked()
         {
-            _gameplaySetupDialog =
-                await _dialogViewService.ShowAsync<GameplaySetupDialogView>(_config.GameplaySetupSettingsData);
-            _gameplaySetupDialog.OnConfirmClicked += StartGameplay;
+            var dialog = await _dialogViewService.ShowAsync<GameplaySetupDialogView>(_config.GameplaySetupSettingsData);
 
-            _disposeActions.Add(() => { _gameplaySetupDialog.OnConfirmClicked -= StartGameplay; });
+            if (_gameplaySetupDialog == null || _gameplaySetupDialog != dialog)
+            {
+                _gameplaySetupDialog = dialog;
+                _gameplaySetupDialog.OnConfirmClicked += StartGameplay;
+                _disposeActions.Add(() => { _gameplaySetupDialog.OnConfirmClicked -= StartGameplay; });
+            }
         }
 
         private void StartGameplay()
