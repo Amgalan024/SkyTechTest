@@ -51,12 +51,12 @@ namespace AppSections.Gameplay.Views
 
         public void SetTurnName(string turnName)
         {
-            _turnText.text = turnName;
+            _turnText.text = $"Turn: {turnName}";
         }
 
         public void SetTime(DateTime time)
         {
-            _timerText.text = time.ToString("mm:ss ");
+            _timerText.text = time.ToString("mm:ss");
         }
     }
 }

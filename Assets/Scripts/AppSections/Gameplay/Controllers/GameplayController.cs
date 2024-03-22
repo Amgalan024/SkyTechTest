@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AppSections.Gameplay.Config;
 using AppSections.Gameplay.InputStrategies;
 using AppSections.Gameplay.Models;
 using AppSections.Gameplay.Views;
@@ -25,9 +26,9 @@ namespace AppSections.Gameplay.Controllers
     /// </summary>
     public class GameplayController : IInitializable, IDisposable
     {
+        private readonly GameplayConfig _gameplayConfig;
         private readonly SectionSwitchParams _sectionSwitchParams;
         private readonly SectionSwitchService _sectionSwitchService;
-
         private readonly FieldConstructor _fieldConstructor;
         private readonly DialogViewService _dialogViewService;
         private readonly ISaveDataService _saveDataService;
@@ -55,7 +56,8 @@ namespace AppSections.Gameplay.Controllers
 
         public GameplayController(SectionSwitchParams sectionSwitchParams, GameplayView view,
             SectionSwitchService sectionSwitchService, FieldConstructor fieldConstructor,
-            DialogViewService dialogViewService, GameTimer gameTimer, ISaveDataService saveDataService)
+            DialogViewService dialogViewService, GameTimer gameTimer, ISaveDataService saveDataService,
+            GameplayConfig gameplayConfig)
         {
             _sectionSwitchParams = sectionSwitchParams;
             _view = view;
@@ -64,6 +66,7 @@ namespace AppSections.Gameplay.Controllers
             _dialogViewService = dialogViewService;
             _gameTimer = gameTimer;
             _saveDataService = saveDataService;
+            _gameplayConfig = gameplayConfig;
         }
 
         void IInitializable.Initialize()

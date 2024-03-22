@@ -1,4 +1,5 @@
 ﻿using System;
+using AppSections.Gameplay.Config;
 using AppSections.Gameplay.Controllers;
 using AppSections.Gameplay.Views;
 using AppSections.PreloadLogic;
@@ -20,10 +21,9 @@ namespace AppSections.Gameplay.EntryPoint
         public event Action<string> OnLoadStepStarted;
 
         [SerializeField] private GameplayView _gameplayView;
-        [SerializeField] private FieldView _fieldView;
-        [SerializeField] private FieldCellView _fieldCellPrefab;
+        [SerializeField] private GameplayConfig _gameplayConfig;
         [SerializeField] private GameplayPreloaderRegisterer _preloaderRegisterer;
-
+        [SerializeField] private Transform _gameplayInstantiateParent;
         private GameplayPreloader _preloader;
 
         async UniTask IPreloadEntryPoint.Prepare()
@@ -52,10 +52,10 @@ namespace AppSections.Gameplay.EntryPoint
         protected override void Configure(IContainerBuilder builder)
         {
             _preloader.RegisterLoadedDependencies(builder);
+            builder.RegisterInstance(_gameplayConfig);
             builder.RegisterInstance(SectionSwitchParams);
             builder.RegisterInstance(_gameplayView);
-            builder.RegisterInstance(_fieldView);
-            builder.RegisterInstance(_fieldCellPrefab);
+            builder.RegisterInstance(_gameplayInstantiateParent);
 
             builder.Register<FieldConstructor>(Lifetime.Singleton);
             builder.Register<GameTimer>(Lifetime.Singleton);

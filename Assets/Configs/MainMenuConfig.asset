@@ -18,6 +18,6 @@ MonoBehaviour:
     LineWinLeghtSetupName: Line Win Lenght
     MinFieldSize: 3
     MaxFieldSize: 8
-    MinRounds: 3
+    MinRounds: 1
     MaxRounds: 5
     ScoreRewards: 100

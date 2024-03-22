@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using AppSections.Gameplay.Config;
 using AppSections.Gameplay.Models;
 using AppSections.Gameplay.Views;
 using UnityEngine;
@@ -7,18 +8,20 @@ namespace AppSections.Gameplay
 {
     public class FieldConstructor
     {
+        private readonly Transform _instantiateParent;
+        private readonly FieldView _fieldPrefab;
+        private readonly FieldCellView _fieldCellPrefab;
+
         public Dictionary<FieldCellView, FieldCellModel> FieldCellModelsByView { get; } = new();
         public Dictionary<FieldCellModel, FieldCellView> FieldCellViewsByModel { get; } = new();
         public List<FieldCellModel> FieldCellModels { get; } = new();
         public List<FieldCellView> FieldCellViews { get; } = new();
 
-        private readonly FieldView _fieldView;
-        private readonly FieldCellView _fieldCellViewPrefab;
-
-        public FieldConstructor(FieldCellView fieldCellViewPrefab, FieldView fieldView)
+        public FieldConstructor(Transform instantiateParent, GameplayConfig config)
         {
-            _fieldCellViewPrefab = fieldCellViewPrefab;
-            _fieldView = fieldView;
+            _instantiateParent = instantiateParent;
+            _fieldCellPrefab = config.FieldCellPrefab;
+            _fieldPrefab = config.FieldPrefab;
         }
 
         /// <summary>
@@ -35,10 +38,12 @@ namespace AppSections.Gameplay
         /// <param name="size"></param>
         public void CreateField(int size)
         {
-            var cellSize = _fieldView.Size / (float) size;
-            var cellOffset = _fieldView.Size / (float) (size);
+            var fieldView = Object.Instantiate(_fieldPrefab, _instantiateParent);
 
-            var centerPosition = _fieldView.CenterPoint.position;
+            var cellSize = fieldView.Size / (float) size;
+            var cellOffset = fieldView.Size / (float) (size);
+
+            var centerPosition = fieldView.CenterPoint.position;
             var startPositionOffset = 0f;
             if (size % 2 == 1)
             {
@@ -61,8 +66,8 @@ namespace AppSections.Gameplay
 
                     var position = new Vector2(positionX, positionY);
 
-                    var fieldCellView = Object.Instantiate(_fieldCellViewPrefab, position, Quaternion.identity,
-                        _fieldView.CellsContainer);
+                    var fieldCellView = Object.Instantiate(_fieldCellPrefab, position, Quaternion.identity,
+                        fieldView.CellsContainer);
 
                     fieldCellView.SetSize(cellSize);
                     fieldCellView.SetClaimed(string.Empty);

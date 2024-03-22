@@ -23,7 +23,7 @@ namespace Services.DialogView
             var prefab = _dialogViewPrefabs.FirstOrDefault(d => d.GetType() == typeof(TDialogView));
             Assert.IsNotNull(prefab);
 
-            var pooledDialog = _dialogViewPool.FirstOrDefault(d => d.Available);
+            var pooledDialog = _dialogViewPool.FirstOrDefault(d => d.Available && d.GetType() == typeof(TDialogView));
             if (pooledDialog != null)
             {
                 return pooledDialog as TDialogView;
