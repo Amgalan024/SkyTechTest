@@ -87,10 +87,9 @@ namespace AppSections.Gameplay.Controllers
             _view.PauseView.OnMainMenuClicked += OnMainMenuClicked;
 
             CreateGame();
-            StartRound();
-
             _gameTimer.Start();
             _gameTimer.OnTick += _view.SetTime;
+            StartRound();
         }
 
         void IDisposable.Dispose()
@@ -179,6 +178,8 @@ namespace AppSections.Gameplay.Controllers
 
         private void StartRound()
         {
+            _gameTimer.Resume();
+
             foreach (var fieldCellModel in _fieldConstructor.FieldCellModels)
             {
                 fieldCellModel.ClearClaim();
@@ -225,6 +226,8 @@ namespace AppSections.Gameplay.Controllers
                 {
                     _view.SetOpponentRoundsText(winRoundsCount, _gameplaySettings.TotalRounds);
                 }
+
+                _gameTimer.Pause();
 
                 var notificationData =
                     new NotificationSetupData("Winner: " + _currentTurnInputStrategy.Value.Model.Name, 1f);

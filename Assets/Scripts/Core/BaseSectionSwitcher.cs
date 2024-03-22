@@ -36,6 +36,7 @@ namespace Core
 
         public async UniTask Switch(params object[] switchParams)
         {
+            _progress = 0;
             _loadingScreenService.Show<DefaultLoadingScreen>(_loadingScreenSetupData);
             _loadingScreenService.SetStatus("Scene Loading", _progress);
             await _sceneLoadService.SwitchSceneAsync(_scene);
