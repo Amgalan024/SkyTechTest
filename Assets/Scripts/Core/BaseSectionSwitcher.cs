@@ -1,5 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using SceneSwitchLogic.Switchers;
+using Services;
 using Services.LoadingScreen;
 using Services.LoadingScreen.SetupData;
 using Services.SceneLoader;
@@ -12,6 +13,7 @@ namespace Core
         public string Key { get; }
 
         private readonly string _scene;
+        private readonly ServicesProvider _servicesProvider;
 
         private readonly LoadingScreenService _loadingScreenService;
         private readonly SceneLoadService _sceneLoadService;
@@ -20,14 +22,15 @@ namespace Core
         private float _progress;
         private float _stepProgress;
 
-        public BaseSectionSwitcher(string key, string scene, LoadingScreenService loadingScreenService,
-            SceneLoadService sceneLoadService, DefaultLoadingScreenSetupData loadingScreenSetupData)
+        public BaseSectionSwitcher(string key, string scene, ServicesProvider servicesProvider,
+            DefaultLoadingScreenSetupData loadingScreenSetupData)
         {
             Key = key;
             _scene = scene;
-            _loadingScreenService = loadingScreenService;
-            _sceneLoadService = sceneLoadService;
+            _servicesProvider = servicesProvider;
             _loadingScreenSetupData = loadingScreenSetupData;
+            _loadingScreenService = _servicesProvider.GetService<LoadingScreenService>();
+            _sceneLoadService = _servicesProvider.GetService<SceneLoadService>();
         }
 
         public async UniTask Switch(params object[] switchParams)
@@ -39,15 +42,16 @@ namespace Core
             var entryPointHolder = Object.FindObjectOfType<EntryPointHolder>();
             var entryPoint = entryPointHolder.EntryPoint;
             entryPoint.SectionSwitchParams.SwitchParams.AddRange(switchParams);
-
             _stepProgress = (1f - _progress);
 
             if (entryPoint is IPreloadEntryPoint preloadEntryPoint)
             {
-                _stepProgress = (1f - _progress) / (preloadEntryPoint.LoadStepsCount + 1);
+                await preloadEntryPoint.Prepare();
+
+                _stepProgress = (1f - _progress) / (preloadEntryPoint.GetLoadStepsCount() + 1);
                 preloadEntryPoint.OnLoadStepStarted += HandleLoadStepStarted;
 
-                await preloadEntryPoint.PreloadEntryPoint();
+                await preloadEntryPoint.Preload();
 
                 preloadEntryPoint.OnLoadStepStarted -= HandleLoadStepStarted;
             }

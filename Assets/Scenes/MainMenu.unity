@@ -292,6 +292,7 @@ GameObject:
   m_Component:
   - component: {fileID: 231254711}
   - component: {fileID: 231254710}
+  - component: {fileID: 231254712}
   m_Layer: 0
   m_Name: MenuEntryPoint
   m_TagString: Untagged
@@ -312,13 +313,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentReference:
-    TypeName: StartupEntryPoint
+    TypeName: Core.Startup.Startup
   autoRun: 0
   autoInjectGameObjects: []
   _mainMenuView: {fileID: 706427996}
   _mainMenuConfig: {fileID: 11400000, guid: 0ab3be2ecf6b3d4499ca32afc64435de, type: 2}
   _subEntryPoints:
   - {fileID: 1416133462}
+  _preloaderRegisterer: {fileID: 231254712}
 --- !u!4 &231254711
 Transform:
   m_ObjectHideFlags: 0
@@ -335,6 +337,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &231254712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 231254709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 150967d368b34b62853413bacd35b4d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentReference:
+    TypeName: Core.Startup.Startup
+  autoRun: 0
+  autoInjectGameObjects: []
 --- !u!1 &306721405
 GameObject:
   m_ObjectHideFlags: 0

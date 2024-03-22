@@ -352,7 +352,7 @@ MonoBehaviour:
   autoRun: 0
   autoInjectGameObjects: []
   _config: {fileID: 11400000, guid: c82a22b303a30364f96ae888a2f5e71b, type: 2}
-  _servicesEntryPoint: {fileID: 1382072238}
+  _servicesProvider: {fileID: 1382072238}
 --- !u!1 &249294930
 GameObject:
   m_ObjectHideFlags: 0
@@ -1131,12 +1131,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc5977cb8a954d16a2474c52cdeed012, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _baseServiceBuilders:
+  _instantServiceBuilders:
   - {fileID: 2008860961}
   - {fileID: 419313895}
   - {fileID: 2011186584}
   - {fileID: 1330908988}
   - {fileID: 1529645832}
+  _serviceBuildersWithSetup: []
 --- !u!4 &1382072239
 Transform:
   m_ObjectHideFlags: 0

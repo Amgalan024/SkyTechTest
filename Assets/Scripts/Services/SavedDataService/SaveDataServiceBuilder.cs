@@ -2,17 +2,17 @@
 
 namespace Services.SavedDataProvider
 {
-    public class SaveDataServiceBuilder : BaseServiceBuilder
+    public class SaveDataServiceBuilder : BaseInstantServiceBuilder
     {
         private PlayerPrefsDataService _playerPrefsDataService;
 
-        public override object Build()
+        public override object BuildService()
         {
             _playerPrefsDataService = new PlayerPrefsDataService();
             return _playerPrefsDataService;
         }
 
-        public override void Configure(IContainerBuilder builder)
+        public override void RegisterService(IContainerBuilder builder)
         {
             builder.RegisterInstance(_playerPrefsDataService).AsImplementedInterfaces();
         }

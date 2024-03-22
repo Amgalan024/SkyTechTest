@@ -6,7 +6,8 @@ namespace Core
     public interface IPreloadEntryPoint
     {
         event Action<string> OnLoadStepStarted;
-        int LoadStepsCount { get; }
-        UniTask PreloadEntryPoint();
+        UniTask Prepare();
+        int GetLoadStepsCount();
+        UniTask Preload();
     }
 }

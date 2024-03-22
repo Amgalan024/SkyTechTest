@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using Core.Gameplay.Controllers;
 using Core.Gameplay.Views;
-using Core.MainMenu.LoadingSteps;
+using Core.PreloadLogic;
 using Cysharp.Threading.Tasks;
-using SceneSwitchLogic.Switchers;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -22,23 +20,26 @@ namespace Core.Gameplay.EntryPoint
         [SerializeField] private GameplayView _gameplayView;
         [SerializeField] private FieldView _fieldView;
         [SerializeField] private FieldCellView _fieldCellPrefab;
+        [SerializeField] private GameplayPreloaderRegisterer _preloaderRegisterer;
 
-        public int LoadStepsCount => _loadingSteps.Count;
+        private GameplayPreloader _preloader;
 
-        private List<ISectionLoadingStep> _loadingSteps = new()
+        async UniTask IPreloadEntryPoint.Prepare()
         {
-            new DelaySectionLoadingStep("Step 1", 0.5f),
-            new DelaySectionLoadingStep("Step 2", 1f),
-            new DelaySectionLoadingStep("Step 3", 1f)
-        };
+            await UniTask.RunOnThreadPool(() => _preloaderRegisterer.Build());
 
-        async UniTask IPreloadEntryPoint.PreloadEntryPoint()
+            _preloader = _preloaderRegisterer.GetPreloader<GameplayPreloader>();
+        }
+
+        int IPreloadEntryPoint.GetLoadStepsCount()
         {
-            foreach (var loadingStep in _loadingSteps)
-            {
-                OnLoadStepStarted?.Invoke(loadingStep.Name);
-                await loadingStep.Load();
-            }
+            return _preloader.GetLoadStepsCount();
+        }
+
+        async UniTask IPreloadEntryPoint.Preload()
+        {
+            _preloader.OnLoadStepStarted += stepName => { OnLoadStepStarted?.Invoke(stepName); };
+            await _preloader.Preload();
         }
 
         public override void BuildEntryPoint()
@@ -48,6 +49,7 @@ namespace Core.Gameplay.EntryPoint
 
         protected override void Configure(IContainerBuilder builder)
         {
+            _preloader.RegisterLoadedDependencies(builder);
             builder.RegisterInstance(SectionSwitchParams);
             builder.RegisterInstance(_gameplayView);
             builder.RegisterInstance(_fieldView);

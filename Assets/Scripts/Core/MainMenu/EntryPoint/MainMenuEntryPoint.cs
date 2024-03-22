@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using Core.MainMenu.Config;
 using Core.MainMenu.Controllers;
-using Core.MainMenu.LoadingSteps;
 using Core.MainMenu.Models;
 using Core.MainMenu.Views;
+using Core.PreloadLogic;
 using Cysharp.Threading.Tasks;
-using SceneSwitchLogic.Switchers;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -23,30 +21,55 @@ namespace Core.MainMenu.EntryPoint
         [SerializeField] private MainMenuView _mainMenuView;
         [SerializeField] private MainMenuConfig _mainMenuConfig;
         [SerializeField] private BaseEntryPoint[] _subEntryPoints;
+        [SerializeField] private MainMenuPreloaderRegisterer _preloaderRegisterer;
 
-        public int LoadStepsCount => _loadingSteps.Count;
+        private MainMenuPreloader _preloader;
 
-        private List<ISectionLoadingStep> _loadingSteps = new()
+        async UniTask IPreloadEntryPoint.Prepare()
         {
-            new DelaySectionLoadingStep("Step 1", 0.5f),
-            new DelaySectionLoadingStep("Step 2", 1f),
-            new DelaySectionLoadingStep("Step 3", 1f)
-        };
+            await UniTask.RunOnThreadPool(()=>_preloaderRegisterer.Build());
 
-        async UniTask IPreloadEntryPoint.PreloadEntryPoint()
-        {
+            _preloader = _preloaderRegisterer.GetPreloader<MainMenuPreloader>();
+
+            _preloader.OnLoadStepStarted += stepName => { OnLoadStepStarted?.Invoke(stepName); };
+
             foreach (var entryPoint in _subEntryPoints)
             {
                 if (entryPoint is IPreloadEntryPoint preloadEntryPoint)
                 {
-                    await preloadEntryPoint.PreloadEntryPoint();
+                    preloadEntryPoint.OnLoadStepStarted += stepName => { OnLoadStepStarted?.Invoke(stepName); };
+                    await preloadEntryPoint.Prepare();
+                }
+            }
+        }
+
+        int IPreloadEntryPoint.GetLoadStepsCount()
+        {
+            var loadSteps = 0;
+
+            loadSteps += _preloader.GetLoadStepsCount();
+
+            foreach (var entryPoint in _subEntryPoints)
+            {
+                if (entryPoint is IPreloadEntryPoint preloadEntryPoint)
+                {
+                    loadSteps += preloadEntryPoint.GetLoadStepsCount();
                 }
             }
 
-            foreach (var loadingStep in _loadingSteps)
+            return loadSteps;
+        }
+
+        async UniTask IPreloadEntryPoint.Preload()
+        {
+            await _preloader.Preload();
+
+            foreach (var entryPoint in _subEntryPoints)
             {
-                OnLoadStepStarted?.Invoke(loadingStep.Name);
-                await loadingStep.Load();
+                if (entryPoint is IPreloadEntryPoint preloadEntryPoint)
+                {
+                    await preloadEntryPoint.Preload();
+                }
             }
         }
 
@@ -62,6 +85,8 @@ namespace Core.MainMenu.EntryPoint
 
         protected override void Configure(IContainerBuilder builder)
         {
+            _preloader.RegisterLoadedDependencies(builder);
+
             builder.RegisterInstance(SectionSwitchParams);
 
             builder.RegisterInstance(_mainMenuView);

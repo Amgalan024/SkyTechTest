@@ -577,6 +577,7 @@ GameObject:
   m_Component:
   - component: {fileID: 231254711}
   - component: {fileID: 231254712}
+  - component: {fileID: 231254713}
   m_Layer: 0
   m_Name: GameplayEntryPoint
   m_TagString: Untagged
@@ -612,12 +613,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentReference:
-    TypeName: StartupEntryPoint
+    TypeName: Core.Startup.Startup
   autoRun: 0
   autoInjectGameObjects: []
   _gameplayView: {fileID: 316955395}
   _fieldView: {fileID: 4722321}
   _fieldCellPrefab: {fileID: 208558575350116354, guid: 726d01450ae924649b3750c336fa2467, type: 3}
+  _preloaderRegisterer: {fileID: 231254713}
+--- !u!114 &231254713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 231254709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e45216b88ec4168963ba7221478a352, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentReference:
+    TypeName: Core.Startup.Startup
+  autoRun: 0
+  autoInjectGameObjects: []
 --- !u!1 &280201621
 GameObject:
   m_ObjectHideFlags: 0

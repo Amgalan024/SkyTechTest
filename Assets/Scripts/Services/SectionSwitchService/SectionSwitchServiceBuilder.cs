@@ -4,17 +4,17 @@ using VContainer;
 
 namespace SceneSwitchLogic.EntryPoint
 {
-    public class SectionSwitchServiceBuilder : BaseServiceBuilder
+    public class SectionSwitchServiceBuilder : BaseInstantServiceBuilder
     {
         private SectionSwitchService _sectionSwitchService;
 
-        public override object Build()
+        public override object BuildService()
         {
             _sectionSwitchService = new SectionSwitchService();
             return _sectionSwitchService;
         }
 
-        public override void Configure(IContainerBuilder builder)
+        public override void RegisterService(IContainerBuilder builder)
         {
             builder.RegisterInstance(_sectionSwitchService);
         }
