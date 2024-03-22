@@ -283,7 +283,7 @@ namespace AppSections.Gameplay.Controllers
                 await _view.EndGameScreenView.AddLoseScore(oldScore, newScore, _gameplaySettings.ScoreReward);
             }
 
-            var gameResult = new GameplayResult(winnerStrategy.Model.Id, _gameTimer.CurrentTime);
+            var gameResult = new GameplayResult(winnerStrategy.Model.Name, _gameTimer.CurrentTime);
 
             _sectionSwitchService.Switch("MainMenu", gameResult);
         }

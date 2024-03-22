@@ -31,7 +31,7 @@ namespace AppSections.MainMenu.Views
 
         public void SetScoreText(int score)
         {
-            _scoreText.text = score.ToString();
+            _scoreText.text = $"Your score: {score}";
         }
 
         public void OpenStore()

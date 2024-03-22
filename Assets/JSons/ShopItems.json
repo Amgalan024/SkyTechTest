@@ -1,21 +1,30 @@
 {
   "shopItems": [
     {
-      "$type": "Core.Store.Models.GameCurrencyProduct, Core",
       "key": "gold",
       "amount": 100,
       "price": 1.99,
       "currency": "usd"
     },
     {
-      "$type": "Core.Store.Models.GameCurrencyProduct, Core",
+      "key": "gold",
+      "amount": 200,
+      "price": 2.99,
+      "currency": "usd"
+    },
+    {
       "key": "silver",
       "amount": 5000,
       "price": 0.99,
       "currency": "usd"
     },
     {
-      "$type": "Core.Store.Models.ItemsPackProduct, Core",
+      "key": "silver",
+      "amount": 1000,
+      "price": 1.99,
+      "currency": "usd"
+    },
+    {
       "key": "starterPack",
       "items": [
         {

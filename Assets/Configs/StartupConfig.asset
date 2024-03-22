@@ -16,4 +16,4 @@ MonoBehaviour:
   <GameplaySwitchConfig>k__BackingField: {fileID: 11400000, guid: d7765a5921bf5de49909017bca390d56, type: 2}
   <StartLoadingScreenSetupData>k__BackingField:
     HeaderText: Start Loading
-    BackgroundColor: {r: 0.5330188, g: 0.81914085, b: 1, a: 1}
+    BackgroundColor: {r: 1, g: 1, b: 1, a: 1}

@@ -26,15 +26,15 @@ namespace AppSections.Gameplay.Views
             color.a = 0;
             _scoreChangeText.color = color;
 
-            await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
+            await UniTask.Delay(TimeSpan.FromSeconds(1f));
             _scoreText.text = $"Your score: {newScore}";
 
             color.a = 1;
-            await _scoreChangeText.DOColor(color, 0.5f).AsyncWaitForCompletion();
+            await _scoreChangeText.DOColor(color, 1f).AsyncWaitForCompletion();
             color.a = 0;
-            await _scoreChangeText.DOColor(color, 0.5f).AsyncWaitForCompletion();
+            await _scoreChangeText.DOColor(color, 1f).AsyncWaitForCompletion();
 
-            await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
+            await UniTask.Delay(TimeSpan.FromSeconds(1f));
         }
 
         public async UniTask AddLoseScore(int oldScore, int newScore, int addedScore)

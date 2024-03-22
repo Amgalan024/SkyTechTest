@@ -15,7 +15,4 @@ MonoBehaviour:
   <MainMenuScene>k__BackingField: MainMenu
   <LoadingScreenSetupData>k__BackingField:
     HeaderText: To Main Menu
-    BackgroundColor: {r: 0.6458157, g: 1, b: 0.5518868, a: 1}
-  <StartLoadingScreenSetupData>k__BackingField:
-    HeaderText: 
-    BackgroundColor: {r: 0, g: 0, b: 0, a: 0}
+    BackgroundColor: {r: 0.5073331, g: 0.990566, b: 0.378471, a: 1}

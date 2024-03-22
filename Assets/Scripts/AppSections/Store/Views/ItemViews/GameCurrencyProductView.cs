@@ -9,6 +9,7 @@ namespace AppSections.Store.Views
     {
         [SerializeField] private TextMeshProUGUI _header;
         [SerializeField] private TextMeshProUGUI _description;
+        [SerializeField] private TextMeshProUGUI _costText;
 
         public override void Setup(object setupData)
         {
@@ -18,6 +19,7 @@ namespace AppSections.Store.Views
 
             _header.text = productData.key;
             _description.text = $"Currency: {productData.key} \nAmount :{productData.amount}";
+            _costText.text = $"Cost: {productData.price} {productData.currency}";
         }
     }
 }
