@@ -7,7 +7,7 @@ using VContainer;
 namespace Services
 {
     /// <summary>
-    /// Точка входа для сервисов может расширяться любыми новыми сервисами которые будут прокинуты через сервис билдер в массив _baseServiceBuilders
+    /// Точка входа для сервисов может расширяться любыми новыми сервисами которые будут прокинуты в массивы сервис билдеров
     /// </summary>
     public class ServicesProvider : MonoBehaviour
     {

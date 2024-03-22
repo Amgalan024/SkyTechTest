@@ -2,7 +2,7 @@
 using Cysharp.Threading.Tasks;
 using VContainer;
 
-namespace Core
+namespace Core.PreloadLogic
 {
     public abstract class Preloader
     {
