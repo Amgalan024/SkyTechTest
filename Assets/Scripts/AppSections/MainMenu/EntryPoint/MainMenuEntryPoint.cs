@@ -16,63 +16,73 @@ namespace AppSections.MainMenu.EntryPoint
     /// <summary>
     /// В дальнейшем главное меню можно дополнять различными подразделами через добавление новых EntryPoint в _subEntryPoints
     /// </summary>
-    public class MainMenuEntryPoint : BaseEntryPoint, IPreloadEntryPoint
+    public class MainMenuEntryPoint : BaseEntryPoint, IEntryPointWithPreload, ILoadingStateDispatcher
     {
         public event Action<string> OnLoadStepStarted;
 
         [SerializeField] private MainMenuView _mainMenuView;
         [SerializeField] private MainMenuConfig _mainMenuConfig;
         [SerializeField] private BaseEntryPoint[] _subEntryPoints;
-        [SerializeField] private MainMenuPreloaderRegisterer _preloaderRegisterer;
-
+        [Header("Preloading")]
+        [SerializeField] private MainMenuPreloaderRegistration _mainMenuPreloaderRegistration;
+        [SerializeField] private EntryPointPreloaderRegistrar _entryPointPreloaderRegistrar;
+        
         private MainMenuPreloader _preloader;
 
-        async UniTask IPreloadEntryPoint.Prepare()
+        async UniTask IEntryPointWithPreload.Prepare()
         {
-            await UniTask.RunOnThreadPool(() => _preloaderRegisterer.Build());
+            _entryPointPreloaderRegistrar.SetEntryPointPreloaderRegistration(_mainMenuPreloaderRegistration);
+            await UniTask.RunOnThreadPool(() => _entryPointPreloaderRegistrar.Build());
 
-            _preloader = _preloaderRegisterer.GetPreloader<MainMenuPreloader>();
+            _preloader = _entryPointPreloaderRegistrar.GetPreloader<MainMenuPreloader>();
 
             _preloader.OnLoadStepStarted += stepName => { OnLoadStepStarted?.Invoke(stepName); };
 
             foreach (var entryPoint in _subEntryPoints)
             {
-                if (entryPoint is IPreloadEntryPoint preloadEntryPoint)
+                if (entryPoint is ILoadingStateDispatcher loadingStateDispatcher)
                 {
-                    preloadEntryPoint.OnLoadStepStarted += stepName => { OnLoadStepStarted?.Invoke(stepName); };
+                    loadingStateDispatcher.OnLoadStepStarted += stepName => { OnLoadStepStarted?.Invoke(stepName); };
+                }
+
+                if (entryPoint is IEntryPointWithPreload preloadEntryPoint)
+                {
                     await preloadEntryPoint.Prepare();
                 }
             }
         }
 
-        int IPreloadEntryPoint.GetLoadStepsCount()
-        {
-            var loadSteps = 0;
-
-            loadSteps += _preloader.GetLoadStepsCount();
-
-            foreach (var entryPoint in _subEntryPoints)
-            {
-                if (entryPoint is IPreloadEntryPoint preloadEntryPoint)
-                {
-                    loadSteps += preloadEntryPoint.GetLoadStepsCount();
-                }
-            }
-
-            return loadSteps;
-        }
-
-        async UniTask IPreloadEntryPoint.Preload()
+        async UniTask IEntryPointWithPreload.Preload()
         {
             await _preloader.Preload();
 
             foreach (var entryPoint in _subEntryPoints)
             {
-                if (entryPoint is IPreloadEntryPoint preloadEntryPoint)
+                if (entryPoint is IEntryPointWithPreload preloadEntryPoint)
                 {
                     await preloadEntryPoint.Preload();
                 }
             }
+        }
+
+        int ILoadingStateDispatcher.GetLoadStepsCount()
+        {
+            var loadSteps = 0;
+
+            if (_preloader is ILoadingStateDispatcher loadingStateDispatcher)
+            {
+                loadSteps += loadingStateDispatcher.GetLoadStepsCount();
+            }
+
+            foreach (var entryPoint in _subEntryPoints)
+            {
+                if (entryPoint is ILoadingStateDispatcher subLoadingStateDispatcher)
+                {
+                    loadSteps += subLoadingStateDispatcher.GetLoadStepsCount();
+                }
+            }
+
+            return loadSteps;
         }
 
         public override void BuildEntryPoint()

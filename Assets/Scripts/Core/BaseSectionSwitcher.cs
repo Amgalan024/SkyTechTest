@@ -45,16 +45,21 @@ namespace Core
             entryPoint.SectionSwitchParams.SwitchParams.AddRange(switchParams);
             _stepProgress = (1f - _progress);
 
-            if (entryPoint is IPreloadEntryPoint preloadEntryPoint)
+            if (entryPoint is IEntryPointWithPreload preloadEntryPoint)
             {
                 await preloadEntryPoint.Prepare();
 
-                _stepProgress = (1f - _progress) / (preloadEntryPoint.GetLoadStepsCount() + 1);
-                preloadEntryPoint.OnLoadStepStarted += HandleLoadStepStarted;
-
-                await preloadEntryPoint.Preload();
-
-                preloadEntryPoint.OnLoadStepStarted -= HandleLoadStepStarted;
+                if (entryPoint is ILoadingStateDispatcher loadingStateDispatcher)
+                {
+                    _stepProgress = (1f - _progress) / (loadingStateDispatcher.GetLoadStepsCount() + 1);
+                    loadingStateDispatcher.OnLoadStepStarted += HandleLoadStepStarted;
+                    await preloadEntryPoint.Preload();
+                    loadingStateDispatcher.OnLoadStepStarted -= HandleLoadStepStarted;
+                }
+                else
+                {
+                    await preloadEntryPoint.Preload();
+                }
             }
 
             entryPoint.BuildEntryPoint();

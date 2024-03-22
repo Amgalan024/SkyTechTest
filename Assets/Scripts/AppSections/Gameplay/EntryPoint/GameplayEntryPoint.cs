@@ -16,32 +16,43 @@ namespace AppSections.Gameplay.EntryPoint
     /// В будущем можно будет добавлять различные типы геймплея регистрируя различные Controller'ы для геймплея
     /// например через поиск соответствующих параметров внутри SectionSwitchParams 
     /// </summary>
-    public class GameplayEntryPoint : BaseEntryPoint, IPreloadEntryPoint
+    public class GameplayEntryPoint : BaseEntryPoint, IEntryPointWithPreload, ILoadingStateDispatcher
     {
         public event Action<string> OnLoadStepStarted;
 
         [SerializeField] private GameplayView _gameplayView;
         [SerializeField] private GameplayConfig _gameplayConfig;
-        [SerializeField] private GameplayPreloaderRegisterer _preloaderRegisterer;
         [SerializeField] private Transform _gameplayInstantiateParent;
+        [Header("Preloading")]
+        [SerializeField] private GameplayPreloaderRegistration _gameplayPreloaderRegistration;
+        [SerializeField] private EntryPointPreloaderRegistrar _entryPointPreloaderRegistrar;
+
         private GameplayPreloader _preloader;
 
-        async UniTask IPreloadEntryPoint.Prepare()
+        async UniTask IEntryPointWithPreload.Prepare()
         {
-            await UniTask.RunOnThreadPool(() => _preloaderRegisterer.Build());
+            _entryPointPreloaderRegistrar.SetEntryPointPreloaderRegistration(_gameplayPreloaderRegistration);
+            await UniTask.RunOnThreadPool(() => _entryPointPreloaderRegistrar.Build());
 
-            _preloader = _preloaderRegisterer.GetPreloader<GameplayPreloader>();
+            _preloader = _entryPointPreloaderRegistrar.GetPreloader<GameplayPreloader>();
         }
 
-        int IPreloadEntryPoint.GetLoadStepsCount()
-        {
-            return _preloader.GetLoadStepsCount();
-        }
-
-        async UniTask IPreloadEntryPoint.Preload()
+        async UniTask IEntryPointWithPreload.Preload()
         {
             _preloader.OnLoadStepStarted += stepName => { OnLoadStepStarted?.Invoke(stepName); };
             await _preloader.Preload();
+        }
+
+        int ILoadingStateDispatcher.GetLoadStepsCount()
+        {
+            if (_preloader is ILoadingStateDispatcher loadingStateDispatcher)
+            {
+                return loadingStateDispatcher.GetLoadStepsCount();
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         public override void BuildEntryPoint()

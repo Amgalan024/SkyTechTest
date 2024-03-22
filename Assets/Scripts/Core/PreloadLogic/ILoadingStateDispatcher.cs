@@ -1,13 +1,11 @@
 ﻿using System;
-using Cysharp.Threading.Tasks;
 
 namespace Core.PreloadLogic
 {
-    public interface IPreloadEntryPoint
+    public interface ILoadingStateDispatcher
     {
         event Action<string> OnLoadStepStarted;
-        UniTask Prepare();
+
         int GetLoadStepsCount();
-        UniTask Preload();
     }
 }

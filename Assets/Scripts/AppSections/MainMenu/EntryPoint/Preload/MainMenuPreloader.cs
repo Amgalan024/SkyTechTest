@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AppSections.MainMenu.LoadingSteps;
+using AppSections.Shared.Configs;
 using Core.PreloadLogic;
 using Cysharp.Threading.Tasks;
 using SceneSwitchLogic.Switchers;
@@ -10,30 +12,36 @@ namespace AppSections.PreloadLogic
     /// <summary>
     /// В будущем тут могут быть различные шаги загрузки перед показом главного меню, ожидание загрузки тяжелого UI например
     /// </summary>
-    public class MainMenuPreloader : Preloader
+    public class MainMenuPreloader : IEntryPointPreloader, ILoadingStateDispatcher
     {
+        public event Action<string> OnLoadStepStarted;
         private readonly List<ISectionLoadingStep> _loadingSteps;
 
-        public MainMenuPreloader()
+        /// <summary>
+        /// В будущем можно отправлять сюда параметры которые регистрируются в MainMenuPreloaderRegistration, конфиги различные, префабы
+        /// Для примера прокинут конфиг с имитацией загрузки
+        /// </summary>
+        public MainMenuPreloader(LoadDelayConfig loadDelayConfig)
         {
-            _loadingSteps = new List<ISectionLoadingStep>
+            _loadingSteps = new List<ISectionLoadingStep>();
+
+            foreach (var loadDelay in loadDelayConfig.LoadDelayDataArray)
             {
-                new DelaySectionLoadingStep("Main Menu Step 1", 0.5f),
-                new DelaySectionLoadingStep("Main Menu Step 2", 1f),
-                new DelaySectionLoadingStep("Main Menu Step 3", 1f)
-            };
+                var delayLoadingStep = new DelaySectionLoadingStep(loadDelay.Name, loadDelay.Delay);
+                _loadingSteps.Add(delayLoadingStep);
+            }
         }
 
-        public override int GetLoadStepsCount()
+        public int GetLoadStepsCount()
         {
             return _loadingSteps.Count;
         }
 
-        public override async UniTask Preload()
+        public async UniTask Preload()
         {
             foreach (var loadingStep in _loadingSteps)
             {
-                InvokeLoadStepStart(loadingStep.Name);
+                OnLoadStepStarted?.Invoke(loadingStep.Name);
                 await loadingStep.Load();
             }
         }
@@ -42,9 +50,8 @@ namespace AppSections.PreloadLogic
         /// В дальнейшем здесь должна быть регистрация результатов прелоадинга
         /// </summary>
         /// <param name="builder"></param>
-        public override void RegisterLoadedDependencies(IContainerBuilder builder)
+        public void RegisterLoadedDependencies(IContainerBuilder builder)
         {
-            
         }
     }
 }

@@ -264,7 +264,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: -5177388603050735206, guid: 71ebafeef3c03457483266a33ab2b270, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -273,7 +273,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 0.5
 --- !u!222 &114195597
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -320,7 +320,18 @@ MonoBehaviour:
   _mainMenuConfig: {fileID: 11400000, guid: 0ab3be2ecf6b3d4499ca32afc64435de, type: 2}
   _subEntryPoints:
   - {fileID: 1416133462}
-  _preloaderRegisterer: {fileID: 231254712}
+  _mainMenuPreloaderRegistration:
+    _loadDelayConfig:
+      <LoadDelayDataArray>k__BackingField:
+      - <Name>k__BackingField: Main Menu Step 1
+        <Delay>k__BackingField: 0.5
+      - <Name>k__BackingField: Main Menu Step 2
+        <Delay>k__BackingField: 0.5
+      - <Name>k__BackingField: Main Menu Step 3
+        <Delay>k__BackingField: 0.5
+      - <Name>k__BackingField: Main Menu Step 4
+        <Delay>k__BackingField: 0.5
+  _entryPointPreloaderRegistrar: {fileID: 231254712}
 --- !u!4 &231254711
 Transform:
   m_ObjectHideFlags: 0
@@ -346,7 +357,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 231254709}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 150967d368b34b62853413bacd35b4d2, type: 3}
+  m_Script: {fileID: 11500000, guid: 1a562e9c556e448eadf71c67aa9a8eb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   parentReference:
@@ -593,7 +604,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: -5177388603050735206, guid: 71ebafeef3c03457483266a33ab2b270, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -602,7 +613,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 0.5
 --- !u!222 &472068163
 CanvasRenderer:
   m_ObjectHideFlags: 0

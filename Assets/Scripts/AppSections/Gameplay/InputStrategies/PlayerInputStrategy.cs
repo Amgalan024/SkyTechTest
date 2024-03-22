@@ -40,7 +40,7 @@ namespace AppSections.Gameplay.InputStrategies
         {
             var fieldCellModel = _fieldCellModelsByView[fieldCellView];
 
-            if (_canInput)
+            if (_canInput && fieldCellModel.IsClaimed == false)
             {
                 _canInput = false;
                 OnInput?.Invoke(fieldCellModel);
