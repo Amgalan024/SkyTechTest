@@ -30,9 +30,17 @@ namespace Services.DialogView.Views
 
         protected override async UniTask DoOnShowAsync()
         {
-            _yesButton.onClick.AddListener(() => { OnConfirmClicked?.Invoke(true); });
+            _yesButton.onClick.AddListener(() =>
+            {
+                OnConfirmClicked?.Invoke(true); 
+                DoOnHideAsync();
+            });
 
-            _noButton.onClick.AddListener(() => { OnConfirmClicked?.Invoke(false); });
+            _noButton.onClick.AddListener(() =>
+            {
+                OnConfirmClicked?.Invoke(false); 
+                DoOnHideAsync();
+            });
 
             gameObject.SetActive(true);
         }

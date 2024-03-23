@@ -1,3 +1,4 @@
+using System;
 using AppSections.Startup.Config;
 using Core;
 using Core.PreloadLogic;
@@ -98,6 +99,7 @@ namespace AppSections.Startup
 
             _progress += _stepProgress;
             _loadingScreenService.SetStatus("Completed", _progress);
+            await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
 
             _loadingScreenService.Close<DefaultLoadingScreen>();
         }

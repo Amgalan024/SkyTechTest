@@ -34,6 +34,7 @@ namespace AppSections.MainMenu.Controllers
         private readonly List<Action> _disposeActions = new();
 
         private GameplaySetupDialogView _gameplaySetupDialog;
+        private ConfirmationDialogView _exitDialogView;
 
         public MainMenuController(SectionSwitchParams sectionSwitchParams, MainMenuView view, MainMenuModel model,
             MainMenuConfig config, SectionSwitchService sectionSwitchService, DialogViewService dialogViewService,
@@ -118,7 +119,12 @@ namespace AppSections.MainMenu.Controllers
             };
 
             var dialog = await _dialogViewService.ShowAsync<ConfirmationDialogView>(confirmationSetupData);
-            dialog.OnConfirmClicked += OnExitConfirmClicked;
+
+            if (_exitDialogView == null || _exitDialogView != dialog)
+            {
+                _exitDialogView = dialog;
+                _exitDialogView.OnConfirmClicked += OnExitConfirmClicked;
+            }
         }
 
         private void OnExitConfirmClicked(bool confirmed)

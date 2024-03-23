@@ -1,11 +1,12 @@
-﻿using Core.PreloadLogic;
+﻿using System;
+using Core.PreloadLogic;
 using Cysharp.Threading.Tasks;
 using SceneSwitchLogic.Switchers;
 using Services;
 using Services.LoadingScreen;
 using Services.LoadingScreen.SetupData;
 using Services.SceneLoader;
-using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Core
 {
@@ -65,6 +66,8 @@ namespace Core
 
             _progress += _stepProgress;
             _loadingScreenService.SetStatus("Completed", _progress);
+
+            await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
 
             _loadingScreenService.Close<DefaultLoadingScreen>();
         }
