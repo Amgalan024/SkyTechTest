@@ -62,12 +62,12 @@ namespace Core
                 }
             }
 
-            entryPoint.BuildEntryPoint();
-
             _progress += _stepProgress;
             _loadingScreenService.SetStatus("Completed", _progress);
 
             await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
+
+            entryPoint.BuildEntryPoint();
 
             _loadingScreenService.Close<DefaultLoadingScreen>();
         }
