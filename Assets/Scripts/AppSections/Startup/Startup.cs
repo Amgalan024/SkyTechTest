@@ -57,10 +57,10 @@ namespace AppSections.Startup
             var gameplaySwitchConfig = _config.GameplaySwitchConfig;
 
             var mainMenuSwitcher = new BaseSectionSwitcher("MainMenu", mainMenuSwitchConfig.MainMenuScene,
-                _servicesProvider, mainMenuSwitchConfig.LoadingScreenSetupData);
+                _loadingScreenService, _sceneLoadService, mainMenuSwitchConfig.LoadingScreenSetupData);
 
             var gameplaySwitcher = new BaseSectionSwitcher("Gameplay", gameplaySwitchConfig.GameplayScene,
-                _servicesProvider, gameplaySwitchConfig.LoadingScreenSetupData);
+                _loadingScreenService, _sceneLoadService, gameplaySwitchConfig.LoadingScreenSetupData);
 
             _sectionSwitchService.AddSwitcher(mainMenuSwitcher);
             _sectionSwitchService.AddSwitcher(gameplaySwitcher);
@@ -81,7 +81,7 @@ namespace AppSections.Startup
             {
                 await preloadEntryPoint.Prepare();
 
-                if (entryPoint is ILoadingStateDispatcher loadingStateDispatcher)
+                if (entryPoint is ILoadingInfoDispatcher loadingStateDispatcher)
                 {
                     _stepProgress = (1f - _progress) / (loadingStateDispatcher.GetLoadStepsCount() + 1);
                     loadingStateDispatcher.OnLoadStepStarted += HandleLoadStepStarted;

@@ -13,7 +13,7 @@ namespace AppSections.PreloadLogic
     /// В будущем тут могут быть различные шаги загрузки перед началом геймплея, может быть асинхронная загрузка и инстанциирование тяжелых ассетов,
     /// может быть что то связанное с сетевым геймплеем, ожидание подключения игроков и т.д. 
     /// </summary>
-    public class GameplayPreloader : IEntryPointPreloader, ILoadingStateDispatcher
+    public class GameplayPreloader : IEntryPointPreloader, ILoadingInfoDispatcher
     {
         public event Action<string> OnLoadStepStarted;
         private readonly List<ISectionLoadingStep> _loadingSteps;
@@ -33,7 +33,7 @@ namespace AppSections.PreloadLogic
             }
         }
 
-        int ILoadingStateDispatcher.GetLoadStepsCount()
+        int ILoadingInfoDispatcher.GetLoadStepsCount()
         {
             return _loadingSteps.Count;
         }

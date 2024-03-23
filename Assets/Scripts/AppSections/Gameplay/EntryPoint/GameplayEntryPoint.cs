@@ -14,9 +14,9 @@ namespace AppSections.Gameplay.EntryPoint
 {
     /// <summary>
     /// В будущем можно будет добавлять различные типы геймплея регистрируя различные Controller'ы для геймплея
-    /// например через поиск соответствующих параметров внутри SectionSwitchParams 
+    /// например через поиск соответствующих параметров внутри SectionSwitchParams с помощью свича
     /// </summary>
-    public class GameplayEntryPoint : BaseEntryPoint, IEntryPointWithPreload, ILoadingStateDispatcher
+    public class GameplayEntryPoint : BaseEntryPoint, IEntryPointWithPreload, ILoadingInfoDispatcher
     {
         public event Action<string> OnLoadStepStarted;
 
@@ -43,9 +43,9 @@ namespace AppSections.Gameplay.EntryPoint
             await _preloader.Preload();
         }
 
-        int ILoadingStateDispatcher.GetLoadStepsCount()
+        int ILoadingInfoDispatcher.GetLoadStepsCount()
         {
-            if (_preloader is ILoadingStateDispatcher loadingStateDispatcher)
+            if (_preloader is ILoadingInfoDispatcher loadingStateDispatcher)
             {
                 return loadingStateDispatcher.GetLoadStepsCount();
             }

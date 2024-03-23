@@ -2,7 +2,7 @@
 
 namespace Core.PreloadLogic
 {
-    public interface ILoadingStateDispatcher
+    public interface ILoadingInfoDispatcher
     {
         event Action<string> OnLoadStepStarted;
 

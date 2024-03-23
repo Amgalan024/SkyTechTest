@@ -16,7 +16,7 @@ namespace AppSections.MainMenu.EntryPoint
     /// <summary>
     /// В дальнейшем главное меню можно дополнять различными подразделами через добавление новых EntryPoint в _subEntryPoints
     /// </summary>
-    public class MainMenuEntryPoint : BaseEntryPoint, IEntryPointWithPreload, ILoadingStateDispatcher
+    public class MainMenuEntryPoint : BaseEntryPoint, IEntryPointWithPreload, ILoadingInfoDispatcher
     {
         public event Action<string> OnLoadStepStarted;
 
@@ -40,7 +40,7 @@ namespace AppSections.MainMenu.EntryPoint
 
             foreach (var entryPoint in _subEntryPoints)
             {
-                if (entryPoint is ILoadingStateDispatcher loadingStateDispatcher)
+                if (entryPoint is ILoadingInfoDispatcher loadingStateDispatcher)
                 {
                     loadingStateDispatcher.OnLoadStepStarted += stepName => { OnLoadStepStarted?.Invoke(stepName); };
                 }
@@ -65,18 +65,18 @@ namespace AppSections.MainMenu.EntryPoint
             }
         }
 
-        int ILoadingStateDispatcher.GetLoadStepsCount()
+        int ILoadingInfoDispatcher.GetLoadStepsCount()
         {
             var loadSteps = 0;
 
-            if (_preloader is ILoadingStateDispatcher loadingStateDispatcher)
+            if (_preloader is ILoadingInfoDispatcher loadingStateDispatcher)
             {
                 loadSteps += loadingStateDispatcher.GetLoadStepsCount();
             }
 
             foreach (var entryPoint in _subEntryPoints)
             {
-                if (entryPoint is ILoadingStateDispatcher subLoadingStateDispatcher)
+                if (entryPoint is ILoadingInfoDispatcher subLoadingStateDispatcher)
                 {
                     loadSteps += subLoadingStateDispatcher.GetLoadStepsCount();
                 }

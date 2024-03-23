@@ -14,7 +14,6 @@ namespace Core
         public string Key { get; }
 
         private readonly string _scene;
-        private readonly ServicesProvider _servicesProvider;
 
         private readonly LoadingScreenService _loadingScreenService;
         private readonly SceneLoadService _sceneLoadService;
@@ -23,15 +22,14 @@ namespace Core
         private float _progress;
         private float _stepProgress;
 
-        public BaseSectionSwitcher(string key, string scene, ServicesProvider servicesProvider,
-            DefaultLoadingScreenSetupData loadingScreenSetupData)
+        public BaseSectionSwitcher(string key, string scene, LoadingScreenService loadingScreenService,
+            SceneLoadService sceneLoadService, DefaultLoadingScreenSetupData loadingScreenSetupData)
         {
             Key = key;
             _scene = scene;
-            _servicesProvider = servicesProvider;
             _loadingScreenSetupData = loadingScreenSetupData;
-            _loadingScreenService = _servicesProvider.GetService<LoadingScreenService>();
-            _sceneLoadService = _servicesProvider.GetService<SceneLoadService>();
+            _loadingScreenService = loadingScreenService;
+            _sceneLoadService = sceneLoadService;
         }
 
         public async UniTask Switch(params object[] switchParams)
@@ -50,7 +48,7 @@ namespace Core
             {
                 await preloadEntryPoint.Prepare();
 
-                if (entryPoint is ILoadingStateDispatcher loadingStateDispatcher)
+                if (entryPoint is ILoadingInfoDispatcher loadingStateDispatcher)
                 {
                     _stepProgress = (1f - _progress) / (loadingStateDispatcher.GetLoadStepsCount() + 1);
                     loadingStateDispatcher.OnLoadStepStarted += HandleLoadStepStarted;

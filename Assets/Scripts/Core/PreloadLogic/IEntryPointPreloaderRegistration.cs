@@ -3,7 +3,7 @@
 namespace Core.PreloadLogic
 {
     /// <summary>
-    /// Интерфейс предназначенный для логики подготовки\регистрации экземпляров IEntryPointPreloader которые в свою очередь отвечают за логику прелоада и регистрацию результатов
+    /// Интерфейс предназначенный для описания логики регистрации экземпляра IEntryPointPreloader и его зависимостей. 
     /// </summary>
     public interface IEntryPointPreloaderRegistration
     {

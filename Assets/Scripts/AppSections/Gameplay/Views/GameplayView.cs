@@ -41,12 +41,12 @@ namespace AppSections.Gameplay.Views
 
         public void SetPlayerRoundsText(int currentRound, int totalRounds)
         {
-            _playerRoundsText.text = $"{currentRound}/{totalRounds}";
+            _playerRoundsText.text = $"Rounds: {currentRound}/{totalRounds}";
         }
 
         public void SetOpponentRoundsText(int currentRound, int totalRounds)
         {
-            _opponentRoundsText.text = $"{currentRound}/{totalRounds}";
+            _opponentRoundsText.text = $"Rounds: {currentRound}/{totalRounds}";
         }
 
         public void SetTurnName(string turnName)

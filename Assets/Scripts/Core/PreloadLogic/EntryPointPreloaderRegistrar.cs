@@ -4,7 +4,7 @@ using VContainer.Unity;
 namespace Core.PreloadLogic
 {
     /// <summary>
-    /// Выделенный класс для вызова метода подготовки\регистрации у IEntryPointPreloaderRegistration
+    /// Выделенный класс для вызова метода регистрации у IEntryPointPreloaderRegistration с помощью наследования от LifetimeScope
     /// </summary>
     public class EntryPointPreloaderRegistrar : LifetimeScope
     {

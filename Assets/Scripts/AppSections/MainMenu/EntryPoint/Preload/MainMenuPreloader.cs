@@ -12,7 +12,7 @@ namespace AppSections.PreloadLogic
     /// <summary>
     /// В будущем тут могут быть различные шаги загрузки перед показом главного меню, ожидание загрузки тяжелого UI например
     /// </summary>
-    public class MainMenuPreloader : IEntryPointPreloader, ILoadingStateDispatcher
+    public class MainMenuPreloader : IEntryPointPreloader, ILoadingInfoDispatcher
     {
         public event Action<string> OnLoadStepStarted;
         private readonly List<ISectionLoadingStep> _loadingSteps;
